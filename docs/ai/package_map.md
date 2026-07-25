@@ -52,7 +52,7 @@ any ecosystem project. Status: `built` / `planned`.
 
 | Package | Responsibility | Status |
 |---------|----------------|--------|
-| `Validation.Collections` (+ `.Adapters`/`.Cardinality`/`.Uniqueness`/`.Ordering`/`.Quantifiers`/`.Aggregates`) | Deterministic collection validation | planned |
+| `Validation.Collections` (generic) | Cardinality, per-element predicate, uniqueness (typed key + related path), quantifiers, aggregate — over a `Count`/`Item` adapter; canonical order required for hashed containers. Ordering/map-key-value/nested-element deferred. | built |
 | `Validation.Deferred` (+ `.Requests`/`.Results`/`.Continuations`/`.Batching`/`.Synchronous`) | Externally-executed checks, replay, batching | planned |
 | `Validation.Introspection` | Immutable structural introspection | planned |
 | `Validation.Adapters.*` | Optional external adapters (never core deps) | planned |

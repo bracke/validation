@@ -29,7 +29,8 @@ package body Validation.Validators is
       Level    : Severity;
       Category : Identifiers.Issue_Category_Id;
       Message  : Messages.Message;
-      Primary  : Paths.Path)
+      Primary  : Paths.Path;
+      Related  : Path_Array)
    is
       --  Apply any active-profile severity override (§34).
       Effective : constant Severity :=
@@ -52,11 +53,15 @@ package body Validation.Validators is
       end if;
 
       declare
-         IB : constant Issues.Issue_Builder :=
+         IB    : Issues.Issue_Builder :=
            Issues.Begin_Issue
              (Ord, Output.Validator_Id, Output.Rule, Effective, Category,
               Primary, Message, Prov);
+         Added : Boolean;
       begin
+         for Related_Path of Related loop
+            Issues.Add_Related_Path (IB, Related_Path, Added);
+         end loop;
          Issues.Append (Output.Issues, Issues.Build (IB));
       end;
       Output.Ordinal := Ord;
@@ -76,7 +81,7 @@ package body Validation.Validators is
         (if Paths.Segment_Count (Relative_Path) = 0 then Output.Base
          else Paths.Concatenate (Output.Base, Relative_Path));
    begin
-      Emit (Output, Level, Category, Message, Primary);
+      Emit (Output, Level, Category, Message, Primary, []);
    end Add_Issue;
 
    procedure Add_Issue_At_Field
@@ -87,8 +92,23 @@ package body Validation.Validators is
       Message  : Messages.Message) is
    begin
       Emit (Output, Level, Category, Message,
-            Paths.Append_Field (Output.Base, Field));
+            Paths.Append_Field (Output.Base, Field), []);
    end Add_Issue_At_Field;
+
+   procedure Add_Issue_With_Related
+     (Output        : in out Rule_Output;
+      Level         : Severity;
+      Category      : Identifiers.Issue_Category_Id;
+      Message       : Messages.Message;
+      Related       : Path_Array;
+      Relative_Path : Paths.Path := Paths.Empty_Relative)
+   is
+      Primary : constant Paths.Path :=
+        (if Paths.Segment_Count (Relative_Path) = 0 then Output.Base
+         else Paths.Concatenate (Output.Base, Relative_Path));
+   begin
+      Emit (Output, Level, Category, Message, Primary, Related);
+   end Add_Issue_With_Related;
 
    ---------------------------------------------------------------------------
    --  Rule constructors

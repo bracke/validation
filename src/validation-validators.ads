@@ -78,6 +78,18 @@ package Validation.Validators is
       Category : Identifiers.Issue_Category_Id;
       Message  : Messages.Message);
 
+   type Path_Array is array (Positive range <>) of Paths.Path;
+
+   --  As Add_Issue, but also attaches related (typically absolute) paths, e.g.
+   --  the first occurrence for a duplicate.
+   procedure Add_Issue_With_Related
+     (Output        : in out Rule_Output;
+      Level         : Severity;
+      Category      : Identifiers.Issue_Category_Id;
+      Message       : Messages.Message;
+      Related       : Path_Array;
+      Relative_Path : Paths.Path := Paths.Empty_Relative);
+
    ---------------------------------------------------------------------------
    --  Rules
    ---------------------------------------------------------------------------

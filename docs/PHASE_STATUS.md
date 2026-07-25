@@ -13,7 +13,7 @@ check, and an example/fixture.
 | 4 | Minimal typed validator engine | **complete** |
 | 5 | Standard scalar validators | **complete** |
 | 6 | Composition, conditions, prerequisites, profiles | **complete** |
-| 7 | Collections | not started |
+| 7 | Collections | **complete** |
 | 8 | Recursive objects, patch, transitions | not started |
 | 9 | Deferred validation | not started |
 | 10 | Complete diagnostics | not started |
@@ -213,3 +213,32 @@ to `Validation.Validators`.
 
 Deferred: `Any_Of` (§44) and `Case` selection — larger branch-evaluation
 semantics that belong with a follow-on; noted for a later increment.
+
+## Phase 7 — collections
+
+Builds clean; suite green (45/45). A first engine addition —
+`Validators.Add_Issue_With_Related` (+ `Path_Array`) — lets rules attach related
+paths (used by uniqueness for the first-occurrence link).
+
+`Validation.Collections` (generic over subject + Validators instance +
+collection/element types + `Get`/`Count`/`Item` adapter formals) provides, all
+through `Parameterized_Rules`:
+
+- **Cardinality** — Min_Count, Max_Count, Exact_Count.
+- **Per-element predicate** (`Each_Element`) — one issue per failing element at
+  its zero-based path `field[i]`.
+- **Uniqueness** (`Unique`, typed key projection) — one issue per duplicate after
+  the first, at the duplicate's path with a related path to the first occurrence.
+- **Quantifiers** (`Quantifier`) — At_Least / At_Most / Exactly over an element
+  predicate.
+- **Aggregate** (`Aggregate`) — Sum_At_Most / Sum_Equals over an integer
+  projection.
+
+The adapter is the `Count`+`Item` random-access pair; arrays, vectors, lists,
+and ordered/hashed maps and sets are supported by supplying an `Item` accessor
+that yields a canonical, deterministic order (hashed containers must not use
+bucket order, VAL-INV-021). Tested against an `Ada.Containers.Vectors` adapter.
+
+Deferred: ordering validators, map key/value validation, and full nested-record
+element validation (needs the Phase 8 rebasing machinery); collection limits are
+carried by the incompleteness model but not yet enforced per-element.

@@ -75,6 +75,10 @@ package Validation.Messages is
    Collection_Minimum : constant Identifiers.Message_Id := MID.Make ("validation.collection.minimum_count");
    Collection_Maximum : constant Identifiers.Message_Id := MID.Make ("validation.collection.maximum_count");
    Collection_Duplicate : constant Identifiers.Message_Id := MID.Make ("validation.collection.duplicate");
+   Collection_Exact   : constant Identifiers.Message_Id := MID.Make ("validation.collection.exact_count");
+   Collection_Element : constant Identifiers.Message_Id := MID.Make ("validation.collection.element");
+   Collection_Quantifier : constant Identifiers.Message_Id := MID.Make ("validation.collection.quantifier");
+   Collection_Aggregate : constant Identifiers.Message_Id := MID.Make ("validation.collection.aggregate");
    Graph_Cycle        : constant Identifiers.Message_Id := MID.Make ("validation.graph.cycle");
    Not_Empty          : constant Identifiers.Message_Id := MID.Make ("validation.not_empty");
    Number_Positive    : constant Identifiers.Message_Id := MID.Make ("validation.number.positive");

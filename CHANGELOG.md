@@ -7,6 +7,15 @@ Added, Changed, Deprecated, Removed, Fixed, Security, Compatibility.
 
 ### Added
 
+- **Phase 7 — collections.** `Validation.Collections` (generic, adapter-driven):
+  cardinality (min/max/exact count), per-element predicate (issue per failing
+  element at `field[i]`), uniqueness (typed key projection, one issue per
+  duplicate with a related path to the first occurrence), quantifiers
+  (at-least/at-most/exactly), and a sum aggregate — all through
+  `Parameterized_Rules`. A supporting engine addition,
+  `Validators.Add_Issue_With_Related` (+ `Path_Array`), attaches related paths.
+  Hashed containers must supply a canonical `Item` order (VAL-INV-021). Suite
+  green 45/45.
 - **Phase 6 — composition, conditions, prerequisites, profiles.**
   `Validation.Validators` gains: profile selection in `Validate` (an
   `Execution_Options.Profiles` set filters rules by group and overrides
