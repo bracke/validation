@@ -10,7 +10,7 @@
 ------------------------------------------------------------------------------
 
 package Validation.Identifier_Syntax
-  with Pure
+  with Pure, SPARK_Mode => On
 is
 
    Max_Length : constant := 128;

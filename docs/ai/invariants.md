@@ -29,8 +29,8 @@ owning package exists) covered by tests. Status legend:
 | VAL-INV-016 | Limit exhaustion is explicit controlled incompleteness | Validation.Results/Recursive | proven |
 | VAL-INV-017 | Missing required context capabilities are invocation errors, not issues | Validation.Contexts | planned |
 | VAL-INV-018 | Infrastructure failure is not ordinary invalidity unless a rule policy maps it | Validation.Deferred | planned |
-| VAL-INV-019 | No HTTP/DB/file/network/scheduler/queue/UI operations | (whole core) | proven* |
-| VAL-INV-020 | No global mutable registries of any kind | (whole core) | proven* |
+| VAL-INV-019 | No HTTP/DB/file/network/scheduler/queue/UI operations | (whole core) | proven (audited) |
+| VAL-INV-020 | No global mutable registries of any kind | (whole core) | proven (audited) |
 | VAL-INV-021 | Hash-container iteration order never determines semantic output order | Validation.Collections | prototyped |
 | VAL-INV-022 | Time-sensitive rules never read the system clock implicitly | Validation.Standard.Temporal | planned |
 | VAL-INV-023 | Localized text is never produced by the core | Validation.Messages | planned |
@@ -52,9 +52,9 @@ owning package exists) covered by tests. Status legend:
 | VAL-INV-039 | Validating obligation data does not prove the obligation satisfied/enforced | Validation.Adapters | planned |
 | VAL-INV-040 | Deferred Validation is never a substitute for Authorization/scope/obligation evaluation | Validation.Deferred | planned |
 
-\* Structural invariants (no I/O, no registries, no auth) are guaranteed by the
-dependency graph and enforced continuously by the dependency-boundary audit; a
-dedicated regression asserts the boundary as packages land.
+Structural invariants (no I/O, no registries, no auth) are guaranteed by the
+dependency graph and enforced by `tools/check_dependencies.sh`, which audits the
+core against forbidden I/O / clock / random / socket / ecosystem `with`s.
 
 ## Phase 0 evidence
 

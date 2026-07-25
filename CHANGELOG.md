@@ -7,6 +7,20 @@ Added, Changed, Deprecated, Removed, Fixed, Security, Compatibility.
 
 ### Added
 
+- **Phase 11 — hardening.** A `hardening_tests` suite: determinism (stable
+  fingerprint over repeated runs), path-algebra and result property tests,
+  deterministic-LCG fuzz targets for identifier construction and UTF-8
+  validation (never raise), condition-fault injection, and ownership. Tooling:
+  `tools/check_dependencies.sh` (core dependency-boundary audit) and
+  `tools/prove.sh` (GNATprove on the SPARK_Mode `Identifier_Syntax`, proved free
+  of run-time errors — which caught and fixed a latent `Text'First + 1`
+  overflow). Suite green 65/65.
+
+### Fixed
+
+- `Identifier_Syntax.Is_Valid` no longer computes `Text'First + 1` (a latent
+  overflow for a pathological lower bound), found by GNATprove.
+
 - **Phase 10 — complete diagnostics.** `Projections.Standard` (standard issue
   projection), `Projections.Canonical_Order` (deterministic issue ordering
   without mutating execution order), `Projections.Distinct_Paths` (sorted

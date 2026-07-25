@@ -17,7 +17,7 @@ check, and an example/fixture.
 | 8 | Recursive objects, patch, transitions | **complete** |
 | 9 | Deferred validation | **complete** |
 | 10 | Complete diagnostics | **complete** |
-| 11 | Hardening | not started |
+| 11 | Hardening | **complete** |
 | 12 | Documentation and release | not started |
 
 ## Phase 0 — complete
@@ -310,3 +310,32 @@ Deferred: the diagnostic projection with an execution TRACE (the trace itself is
 not built — it is non-semantic, §14/§58), the By_Object_Key / By_Source
 groupings, related-path mirroring, and in-projection redaction policy knobs
 (paths already render redaction-aware).
+
+## Phase 11 — hardening
+
+Builds clean; suite green (65/65). A `hardening_tests` suite adds:
+
+- **Determinism** — the same subject validated 50× yields an identical semantic
+  fingerprint and issue count.
+- **Property tests** — path algebra (append/parent round-trip, root prefixes
+  all, reflexive equality, equal-paths-hash-equally, subtree) over 400 generated
+  paths; result properties (severity counts partition the issue count; invalid
+  iff an error exists).
+- **Fuzz targets** (deterministic LCG, no runtime randomness, §72) — 800
+  iterations each: identifier construction never raises and agrees with
+  Is_Valid; UTF-8 validation never raises and Scalar_Count never exceeds byte
+  length.
+- **Fault injection** — a faulting condition converts to an invocation failure
+  at the callback boundary.
+- **Ownership** — a validator built inside a function (its builder long gone)
+  validates correctly (VAL-INV-028).
+
+Tooling: `tools/check_dependencies.sh` audits the core against forbidden I/O /
+clock / random / socket / ecosystem `with`s (clean, 55 units). `tools/prove.sh`
+runs GNATprove on the SPARK_Mode foundational unit `Validation.Identifier_Syntax`
+— proved free of run-time errors (§74). GNATprove caught a real latent overflow
+(`Text'First + 1`), now fixed. Callback-heavy polymorphic execution is out of
+proof scope by design.
+
+Deferred: broader SPARK proof of more foundational units, structured benchmarks,
+and a formal security-review document (the threat model is in the AI docs).

@@ -9,6 +9,7 @@ with Collection_Tests;
 with Nested_Tests;
 with Deferred_Tests;
 with Diagnostics_Tests;
+with Hardening_Tests;
 
 package body All_Suites is
 
@@ -27,6 +28,7 @@ package body All_Suites is
       Nested_Tests.Add_Tests (Result);
       Deferred_Tests.Add_Tests (Result);
       Diagnostics_Tests.Add_Tests (Result);
+      Hardening_Tests.Add_Tests (Result);
       return Result;
    end Suite;
 
