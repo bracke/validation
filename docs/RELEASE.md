@@ -9,29 +9,31 @@ may invalidate prior continuations and must say so.
 
 ## Release gates
 
-A release is valid only when all of these pass:
+The gates run through the **`check_validation`** subcrate (which depends on
+`project_tools`, the sibling-project release-check mechanism):
 
-- **Build** — `alr build` (library) and `cd tests && alr build` and
-  `cd examples && alr build`, all clean under the strict switches.
-- **Test** — `./tests/bin/tests` green (currently 65/65), including the
-  determinism, fuzz, fault-injection, and ownership tests.
-- **Quality** — `./tools/check_dependencies.sh` clean (headless boundary);
-  `./tools/prove.sh` clean (GNATprove on the SPARK_Mode units).
-- **Docs** — README, QUICKSTART, ARCHITECTURE, VALIDATOR_CATALOG, SECURITY, the
-  `docs/ai/*` set, ADRs, and CHANGELOG current; the example compiles and runs.
-- **Determinism** — semantic snapshots reproducible; hashed insertion order and
-  deferred arrival order independent; no random ids/timestamps/addresses in
-  semantic output.
-- **Artifacts** — version consistent across `alire.toml` files; CHANGELOG entry;
-  no build output / secrets in the source archive.
+```sh
+cd check_validation && alr build
+./bin/check_validation                 # required surface + dependency audit (fast)
+./bin/check_validation --release       # + build library, build/run tests, build/run example
+./bin/check_validation --release-strict  # + require clean git worktrees
+```
 
-## project_tools integration (pending)
+`check_validation` verifies, via `project_tools`:
 
-The sibling projects (Tables/Navigation/Forms/humanize) run release, doc, and
-repository checks through a dedicated `check_<crate>` subcrate that depends on
-`project_tools`. Validation should gain a `check_validation` subcrate wired the
-same way; until then the gates above are run via the scripts in `tools/` and the
-test subcrate. This is the one remaining release-integration task.
+- **Required surface** — README, LICENSE, CHANGELOG, SECURITY, CONTRIBUTING, the
+  `docs/` guides and `docs/ai/*` set, the ADR index, the `tools/` scripts, and
+  the example source; plus key text (the `gnat_native` pin, `VAL-INV-040`).
+- **Dependency boundary** — runs `tools/check_dependencies.sh` (headless audit).
+- **Build/test/example** (`--release`) — builds the library, builds and runs the
+  AUnit suite (65/65), and builds and runs the example.
+- **Clean worktrees** (`--release-strict`) — validation and project_tools.
+
+Additionally, run `./tools/prove.sh` for the GNATprove check on the SPARK_Mode
+units, and confirm determinism (semantic snapshots reproducible; hashed
+insertion and deferred arrival order independent; no random ids/timestamps/
+addresses in semantic output) and artifact hygiene (versions consistent, no
+build output/secrets in the source archive).
 
 ## Cutting a release
 

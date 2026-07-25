@@ -18,7 +18,7 @@ check, and an example/fixture.
 | 9 | Deferred validation | **complete** |
 | 10 | Complete diagnostics | **complete** |
 | 11 | Hardening | **complete** |
-| 12 | Documentation and release | **complete** (except project_tools wiring) |
+| 12 | Documentation and release | **complete** |
 
 ## Phase 0 — complete
 
@@ -354,8 +354,12 @@ Library, tests, and the example all build clean; suite green (65/65).
 - **Release files** — `LICENSE`, `CONTRIBUTING.md`, expanded `README.md`, CI
   updated to build the example and run the dependency audit.
 
-**Remaining release-integration task:** a `check_validation` subcrate wired to
-`project_tools` (the sibling-project release/doc/repo-check mechanism). Until
-then the release gates run via `tools/` and the test subcrate. See
-`docs/RELEASE.md`. Consistent with the wider stack, standalone release is
-deferred until the rest of the stack is in place.
+- **Release guard** — a `check_validation/` subcrate wired to `project_tools`
+  (the sibling-project release/doc/repo-check mechanism). It verifies the
+  required release surface and dependency boundary (default), and additionally
+  builds and runs the tests and example (`--release`) and requires clean git
+  worktrees (`--release-strict`). See `docs/RELEASE.md`.
+
+Consistent with the wider stack, standalone Alire publication is deferred until
+the rest of the stack is in place — but the crate is now complete and its
+release gates are wired.

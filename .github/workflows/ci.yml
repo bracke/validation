@@ -37,3 +37,9 @@ jobs:
           cd examples
           alr --non-interactive build
           ./bin/quickstart
+
+      - name: Release guard (project_tools)
+        run: |
+          cd check_validation
+          alr --non-interactive build
+          ./bin/check_validation

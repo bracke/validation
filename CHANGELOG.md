@@ -12,8 +12,11 @@ Added, Changed, Deprecated, Removed, Fixed, Security, Compatibility.
   `docs/VALIDATOR_CATALOG.md`, `SECURITY.md`, `docs/RELEASE.md`); dedicated ADRs
   for 002/005/007/018 (plus the existing 014/015); `LICENSE`, `CONTRIBUTING.md`,
   an expanded `README.md`; and CI extended to build the example and run the
-  dependency-boundary audit. Remaining: the `check_validation` / `project_tools`
-  release-check wiring.
+  dependency-boundary audit.
+- **Release guard.** A `check_validation/` subcrate wired to `project_tools`
+  verifies the required release surface and dependency boundary (default), builds
+  and runs the tests + example (`--release`), and requires clean git worktrees
+  (`--release-strict`). Wired into CI.
 - **Phase 11 — hardening.** A `hardening_tests` suite: determinism (stable
   fingerprint over repeated runs), path-algebra and result property tests,
   deterministic-LCG fuzz targets for identifier construction and UTF-8

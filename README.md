@@ -85,6 +85,7 @@ validation/
 ├── src/                 library sources (Validation.*)
 ├── tests/               AUnit test subcrate
 ├── examples/            compilable example programs
+├── check_validation/    project_tools release guard
 ├── tools/               dependency audit + proof scripts
 ├── docs/                guides, ADRs, AI-oriented docs
 │   ├── adr/             architecture decision records
