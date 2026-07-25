@@ -11,7 +11,7 @@ check, and an example/fixture.
 | 2 | Issues, results, and projections | **complete** |
 | 3 | Contexts, profiles, structural metadata | **complete** |
 | 4 | Minimal typed validator engine | **complete** |
-| 5 | Standard scalar validators | not started |
+| 5 | Standard scalar validators | **complete** |
 | 6 | Composition, conditions, prerequisites, profiles | not started |
 | 7 | Collections | not started |
 | 8 | Recursive objects, patch, transitions | not started |
@@ -163,3 +163,26 @@ API (the phase criterion).
 The rule model was built inside the Validators generic (rather than a separate
 `Validation.Rules` package) because rules are subject-typed and tightly coupled
 to the engine; documented in docs/ai/package_map.md.
+
+## Phase 5 — standard scalar validators
+
+Builds clean; suite green (35/35). Standard validators are implemented THROUGH
+the public rule abstractions, enabled by a new `Validators.Parameterized_Rules`
+(a rule whose runtime bounds are stored immutably in the node; the check is a
+library-level subprogram — no access-to-subprogram closure).
+
+- `Validation.Standard` — the actual-value disclosure policy (Exclude_Actual by
+  default, §42): standard messages carry the configured BOUND, never the actual
+  field value (VAL-INV-035).
+- `Validation.Standard.UTF_8` — the one audited decoder: Is_Valid (rejects
+  overlong, surrogate, out-of-range, truncated, stray-continuation) + a
+  code-point Scalar_Count.
+- `Validation.Standard.Text` (generic over a String accessor) — Min/Max/Exact
+  length, Non_Empty, Non_Blank, Valid_UTF8.
+- `Validation.Standard.Numerics` (generic over a signed-integer accessor) —
+  Minimum, Maximum, In_Range, Positive_Value, Non_Negative, Non_Zero.
+
+No validator trims, normalizes, or repairs the subject (VAL-INV-014). Deferred
+(extensible via the same mechanism): comparisons across fields, enumerations/
+membership, temporal (needs the clock capability), relationships, and more
+syntax validators (Ada identifier, hex, UUID).

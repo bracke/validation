@@ -3,6 +3,7 @@ with Foundation_Tests;
 with Result_Tests;
 with Context_Tests;
 with Engine_Tests;
+with Standard_Tests;
 
 package body All_Suites is
 
@@ -15,6 +16,7 @@ package body All_Suites is
       Result_Tests.Add_Tests (Result);
       Context_Tests.Add_Tests (Result);
       Engine_Tests.Add_Tests (Result);
+      Standard_Tests.Add_Tests (Result);
       return Result;
    end Suite;
 

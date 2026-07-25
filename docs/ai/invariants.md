@@ -24,7 +24,7 @@ owning package exists) covered by tests. Status legend:
 | VAL-INV-011 | Deferred result arrival order does not affect output | Validation.Deferred | planned |
 | VAL-INV-012 | Unknown/duplicate/stale/incompatible deferred results never silently accepted | Validation.Deferred | planned |
 | VAL-INV-013 | Validation never mutates the subject | Validation.Validators | proven |
-| VAL-INV-014 | Validation never silently normalizes/repairs/trims/canonicalizes/defaults | Validation.Standard | planned |
+| VAL-INV-014 | Validation never silently normalizes/repairs/trims/canonicalizes/defaults | Validation.Standard | proven |
 | VAL-INV-015 | No externally observable identity from an access value or memory address | Validation.Paths/Contexts | prototyped |
 | VAL-INV-016 | Limit exhaustion is explicit controlled incompleteness | Validation.Results | prototyped |
 | VAL-INV-017 | Missing required context capabilities are invocation errors, not issues | Validation.Contexts | planned |

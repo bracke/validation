@@ -49,7 +49,7 @@ package Validation.Messages is
    function Has_Argument
      (Item : Message; Name : Identifiers.Argument_Name) return Boolean;
 
-   function "=" (Left, Right : Message) return Boolean;
+   overriding function "=" (Left, Right : Message) return Boolean;
 
    ---------------------------------------------------------------------------
    --  Standard message ids (§10). Applications may override any of these.
@@ -76,6 +76,11 @@ package Validation.Messages is
    Collection_Maximum : constant Identifiers.Message_Id := MID.Make ("validation.collection.maximum_count");
    Collection_Duplicate : constant Identifiers.Message_Id := MID.Make ("validation.collection.duplicate");
    Graph_Cycle        : constant Identifiers.Message_Id := MID.Make ("validation.graph.cycle");
+   Not_Empty          : constant Identifiers.Message_Id := MID.Make ("validation.not_empty");
+   Number_Positive    : constant Identifiers.Message_Id := MID.Make ("validation.number.positive");
+   Number_Non_Negative : constant Identifiers.Message_Id := MID.Make ("validation.number.non_negative");
+   Number_Negative    : constant Identifiers.Message_Id := MID.Make ("validation.number.negative");
+   Number_Non_Zero    : constant Identifiers.Message_Id := MID.Make ("validation.number.non_zero");
 
    ---------------------------------------------------------------------------
    --  Standard argument names (§10).

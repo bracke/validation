@@ -205,6 +205,43 @@ package body Validation.Validators is
 
    end Custom_Rules;
 
+   package body Parameterized_Rules is
+
+      type PP_Node is new Rule_Node with record
+         Params : Params_Type;
+      end record;
+
+      overriding procedure Apply_Node
+        (Node    : PP_Node;
+         Subject : Subject_Type;
+         Context : Contexts.Context;
+         Output  : in out Rule_Output);
+
+      overriding procedure Apply_Node
+        (Node    : PP_Node;
+         Subject : Subject_Type;
+         Context : Contexts.Context;
+         Output  : in out Rule_Output) is
+      begin
+         Apply (Subject, Node.Params, Context, Output);
+      end Apply_Node;
+
+      function Make
+        (Params  : Params_Type;
+         Rule_Id : Identifiers.Rule_Id;
+         Phase   : Phases.Phase := Phases.Phase_Value) return Rule
+      is
+         N : PP_Node;
+      begin
+         N.Config :=
+           (Rule_Id => Rule_Id, Kind => Custom_Kind, Phase => Phase,
+            others => <>);
+         N.Params := Params;
+         return (Held => Node_Holders.To_Holder (N));
+      end Make;
+
+   end Parameterized_Rules;
+
    ---------------------------------------------------------------------------
    --  Builder / finalization
    ---------------------------------------------------------------------------

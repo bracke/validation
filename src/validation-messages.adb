@@ -54,7 +54,7 @@ package body Validation.Messages is
       return False;
    end Has_Argument;
 
-   function "=" (Left, Right : Message) return Boolean is
+   overriding function "=" (Left, Right : Message) return Boolean is
    begin
       if not MIds."=" (Left.Id, Right.Id)
         or else Left.Arguments.Length /= Right.Arguments.Length

@@ -121,6 +121,25 @@ package Validation.Validators is
          Phase   : Phases.Phase := Phases.Phase_Value) return Rule;
    end Custom_Rules;
 
+   --  A rule whose behaviour is parameterized by a RUNTIME value stored
+   --  immutably in the node. Apply (a library-level subprogram) receives the
+   --  subject, the stored params, and the output. This is how standard
+   --  validators (min length, range, ...) carry their bounds without an
+   --  access-to-subprogram closure.
+   generic
+      type Params_Type is private;
+      with procedure Apply
+        (Subject : Subject_Type;
+         Params  : Params_Type;
+         Context : Contexts.Context;
+         Output  : in out Rule_Output);
+   package Parameterized_Rules is
+      function Make
+        (Params  : Params_Type;
+         Rule_Id : Identifiers.Rule_Id;
+         Phase   : Phases.Phase := Phases.Phase_Value) return Rule;
+   end Parameterized_Rules;
+
    ---------------------------------------------------------------------------
    --  Builder and finalization
    ---------------------------------------------------------------------------

@@ -7,6 +7,15 @@ Added, Changed, Deprecated, Removed, Fixed, Security, Compatibility.
 
 ### Added
 
+- **Phase 5 — standard scalar validators.** A new
+  `Validators.Parameterized_Rules` (runtime bounds stored immutably in the node)
+  enables standard validators built through the public rule abstractions.
+  `Validation.Standard` (actual-value disclosure policy, exclude-by-default),
+  `Validation.Standard.UTF_8` (audited Is_Valid + Scalar_Count),
+  `Validation.Standard.Text` (min/max/exact length, non-empty, non-blank,
+  valid-UTF8), and `Validation.Standard.Numerics` (minimum, maximum, in-range,
+  positive, non-negative, non-zero). Standard messages carry the configured
+  bound, never the actual value. Suite green 35/35.
 - **Phase 4 — minimal typed validator engine.** `Validation.Validators`
   (generic over the subject type): an engine-controlled `Rule_Output` (rules
   emit only through Add_Issue/Add_Issue_At_Field; the engine supplies validator/
