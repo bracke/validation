@@ -20,6 +20,9 @@ jobs:
       - name: Set up Alire
         uses: alire-project/setup-alire@v4
 
+      - name: Dependency-boundary audit
+        run: ./tools/check_dependencies.sh
+
       - name: Build library
         run: alr --non-interactive build
 
@@ -28,3 +31,9 @@ jobs:
           cd tests
           alr --non-interactive build
           ./bin/tests
+
+      - name: Build and run the example
+        run: |
+          cd examples
+          alr --non-interactive build
+          ./bin/quickstart

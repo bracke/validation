@@ -1,0 +1,24 @@
+name = "examples"
+description = "Compilable examples for the validation library"
+version = "0.1.0-dev"
+
+authors = ["Bent Bracke"]
+maintainers = ["Bent Bracke <bent@bracke.dk>"]
+maintainers-logins = ["bracke"]
+licenses = "MIT OR Apache-2.0 WITH LLVM-exception"
+website = ""
+tags = []
+
+executables = ["quickstart"]
+
+[[depends-on]]
+gnat_native = "=15.2.1"
+
+[[depends-on]]
+validation = "*"
+
+[[pins]]
+validation = { path = ".." }
+
+[build-profiles]
+"*" = "development"

@@ -29,23 +29,53 @@ Consumers (Forms, Tables, Webframework apps, services, importers, CLIs, jobs)
 depend on Validation; Validation depends on none of them. See
 [`docs/ai/allowed_dependencies.md`](docs/ai/allowed_dependencies.md).
 
+## Example
+
+```ada
+package CV is new Validation.Validators (Customer);
+package Email_Text is new Validation.Standard.Text (Customer, CV, Get_Email);
+package Age_Num is new Validation.Standard.Numerics (Customer, CV, Integer, Get_Age);
+
+B : CV.Builder := CV.Start (Ids.Validator_Ids.Make ("customer"));
+--  ...
+CV.Add (B, Email_Text.Non_Empty (F_Email, Ids.Rule_Ids.Make ("email/required")));
+CV.Add (B, Age_Num.In_Range     (F_Age, 0, 130, Ids.Rule_Ids.Make ("age/range")));
+
+Result : constant Res.Result :=
+  CV.Validate (Subject, CV.Get_Validator (CV.Finalize (B)), Context);
+--  Result.Validity, Result.Issue_Count, Projections.Canonical_Order (...), ...
+```
+
+Full runnable version: [`examples/src/quickstart.adb`](examples/src/quickstart.adb).
+
 ## Status
 
-Under construction, built in vertical slices (see
-[`docs/PHASE_STATUS.md`](docs/PHASE_STATUS.md)).
+Feature-complete V1, built in vertical slices (phases 0–12, see
+[`docs/PHASE_STATUS.md`](docs/PHASE_STATUS.md)); **65 tests green**. Scalars,
+records, nested and recursive objects, collections, profiles/conditions/
+prerequisites, deferred validation with replay, and the diagnostics/projection
+surface are all built and tested. The one open release-integration task is the
+`check_validation` / `project_tools` wiring (see [`docs/RELEASE.md`](docs/RELEASE.md)).
 
-- **Phase 0 — repository & feasibility prototypes: complete.** The two riskiest
-  Ada design questions are proven to compile and behave under the strict switch
-  set: heterogeneous typed **capability storage** (no exposed type erasure, no
-  address identity, schema-checked recovery) and safe **callback storage**
-  (predicates captured by instantiation into immutable class-wide nodes — no
-  stored access-to-local). See [`docs/adr/`](docs/adr/).
+## Documentation
+
+- [Quickstart](docs/QUICKSTART.md) · [Architecture](docs/ARCHITECTURE.md) ·
+  [Validator catalog](docs/VALIDATOR_CATALOG.md) · [Security](SECURITY.md) ·
+  [Release](docs/RELEASE.md)
+- AI-oriented: [package map](docs/ai/package_map.md),
+  [invariants](docs/ai/invariants.md),
+  [prohibited patterns](docs/ai/prohibited_patterns.md),
+  [allowed dependencies](docs/ai/allowed_dependencies.md)
+- [Architecture Decision Records](docs/adr/)
 
 ## Building and testing
 
 ```sh
-alr build                       # build the library
-cd tests && alr build && ./bin/tests   # build and run the AUnit suite
+alr build                                    # build the library
+cd tests && alr build && ./bin/tests         # AUnit suite (65 tests)
+cd examples && alr build && ./bin/quickstart # runnable example
+./tools/check_dependencies.sh                # headless dependency-boundary audit
+./tools/prove.sh                             # GNATprove on the SPARK_Mode units
 ```
 
 ## Layout
@@ -53,7 +83,9 @@ cd tests && alr build && ./bin/tests   # build and run the AUnit suite
 ```
 validation/
 ├── src/                 library sources (Validation.*)
-├── tests/               AUnit test subcrate (+ Phase 0 prototypes)
+├── tests/               AUnit test subcrate
+├── examples/            compilable example programs
+├── tools/               dependency audit + proof scripts
 ├── docs/                guides, ADRs, AI-oriented docs
 │   ├── adr/             architecture decision records
 │   └── ai/              package map, invariants, prohibited patterns, ...
@@ -62,4 +94,4 @@ validation/
 
 ## License
 
-MIT OR Apache-2.0 WITH LLVM-exception.
+MIT OR Apache-2.0 WITH LLVM-exception. See [LICENSE](LICENSE).

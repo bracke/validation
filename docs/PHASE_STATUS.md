@@ -18,7 +18,7 @@ check, and an example/fixture.
 | 9 | Deferred validation | **complete** |
 | 10 | Complete diagnostics | **complete** |
 | 11 | Hardening | **complete** |
-| 12 | Documentation and release | not started |
+| 12 | Documentation and release | **complete** (except project_tools wiring) |
 
 ## Phase 0 — complete
 
@@ -339,3 +339,23 @@ proof scope by design.
 
 Deferred: broader SPARK proof of more foundational units, structured benchmarks,
 and a formal security-review document (the threat model is in the AI docs).
+
+## Phase 12 — documentation and release
+
+Library, tests, and the example all build clean; suite green (65/65).
+
+- **Runnable example** — `examples/` subcrate with `quickstart.adb` (builds and
+  runs, prints canonical-ordered results).
+- **Guides** — `docs/QUICKSTART.md`, `docs/ARCHITECTURE.md`,
+  `docs/VALIDATOR_CATALOG.md`, `SECURITY.md`, `docs/RELEASE.md`; the AI-doc set
+  (invariants, package map, prohibited patterns, allowed dependencies) is current.
+- **ADRs** — dedicated files for 002, 005, 007, 014, 015, 018; the rest are
+  accepted and documented in `ARCHITECTURE.md` (index in `docs/adr/README.md`).
+- **Release files** — `LICENSE`, `CONTRIBUTING.md`, expanded `README.md`, CI
+  updated to build the example and run the dependency audit.
+
+**Remaining release-integration task:** a `check_validation` subcrate wired to
+`project_tools` (the sibling-project release/doc/repo-check mechanism). Until
+then the release gates run via `tools/` and the test subcrate. See
+`docs/RELEASE.md`. Consistent with the wider stack, standalone release is
+deferred until the rest of the stack is in place.
