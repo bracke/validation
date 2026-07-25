@@ -9,16 +9,19 @@ any ecosystem project. Status: `built` / `planned`.
 | Package | Responsibility | Status |
 |---------|----------------|--------|
 | `Validation` | Root namespace, library version | built |
-| `Validation.Identifiers` | Strongly typed ids (Validator_Id, Rule_Id, Field_Id, ...) with checked construction, ordering, hashing | planned |
-| `Validation.Versions` | Semantic + protocol/schema version types | planned |
-| `Validation.Errors` | Generic value-or-errors outcome; definition/invocation error domains | planned |
-| `Validation.Values` | Immutable neutral value model (Text, integers, Real w/ NaN/Inf, Decimal, Duration, Instant, ...) + disclosure classification | planned |
-| `Validation.Fingerprints` | Deterministic fingerprint algorithm/format | planned |
-| `Validation.Paths` (+ `.Rendering`) | Structured immutable paths (Field/Index/Key/Object_Identity/Synthetic), rebasing, redaction | planned |
-| `Validation.Messages` | Stable message ids + ordered typed arguments | planned |
-| `Validation.Metadata` | Bounded metadata key/value | planned |
-| `Validation.Source_References` | Neutral source-reference model | planned |
-| `Validation.Provenance` | Minimal/Standard provenance | planned |
+| `Validation.Identifier_Syntax` | Shared ASCII identifier syntax rule | built |
+| `Validation.Bounded_Identifier` (generic) | Mints one distinct strong id type per category | built |
+| `Validation.Identifiers` | The concrete strongly typed id categories | built |
+| `Validation.Versions` | Semantic + protocol/schema version types | built |
+| `Validation.Outcomes` (generic) | Generic value-or-errors outcome | built |
+| `Validation.Values` | Immutable neutral value model (Text, integers, Real w/ NaN/Inf, Decimal, Duration, Instant, ...) + disclosure classification | built |
+| `Validation.Fingerprints` | Deterministic FNV-1a/64 fingerprint algorithm/format | built |
+| `Validation.Paths` | Structured immutable paths (Field/Index/Key/Object_Identity/Synthetic), rebasing, redaction-aware render | built |
+| `Validation.Messages` | Stable message ids + ordered typed arguments | built |
+| `Validation.Metadata` | Bounded metadata key/value | built |
+| `Validation.Source_References` | Neutral source-reference model | built |
+| `Validation.Errors` | Definition/invocation error records | planned (Phase 2) |
+| `Validation.Provenance` | Minimal/Standard provenance | planned (Phase 2) |
 
 ## Issues & results (Phase 2)
 

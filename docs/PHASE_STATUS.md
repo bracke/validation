@@ -7,7 +7,7 @@ check, and an example/fixture.
 | Phase | Title | Status |
 |-------|-------|--------|
 | 0 | Repository & feasibility prototypes | **complete** |
-| 1 | Foundational value layer | not started |
+| 1 | Foundational value layer | **complete** |
 | 2 | Issues, results, and projections | not started |
 | 3 | Contexts, profiles, structural metadata | not started |
 | 4 | Minimal typed validator engine | not started |
@@ -46,3 +46,35 @@ land with Phase 9): the opaque deferred-payload + typed-interpreter prototype.
 Documented Phase 0 decisions: ADR-014 (callback ownership), ADR-015 (capability
 storage). See `docs/adr/`. Deliberate deviations from sibling conventions are
 recorded in `docs/ai/package_map.md`.
+
+## Phase 1 — complete
+
+The foundational value layer builds clean and the suite is green (13/13,
+including the Phase 0 prototypes). Packages delivered:
+
+- `Validation.Identifier_Syntax` / `Validation.Bounded_Identifier` (generic) /
+  `Validation.Identifiers` — one ASCII syntax rule; a generic that mints a
+  DISTINCT strong id type per category (checked Make + non-raising Try_Make,
+  validity, null, equality, total order, hashing, bounded image); ~18 concrete
+  id categories.
+- `Validation.Versions` — Semantic_Version + independent Schema_Version streams.
+- `Validation.Outcomes` (generic) — the one value-or-errors abstraction
+  (success never partial, failure never empty).
+- `Validation.Values` — neutral immutable value model: Text, signed/unsigned,
+  Boolean, Real (finite/NaN/±Inf, signed zero), Decimal (sign/coefficient/
+  scale), Count, Identifier, Enumeration, Duration, Instant, Civil_Date, Path,
+  Opaque; every value carries a disclosure class; Secret redacts in Image.
+- `Validation.Paths` — structured immutable paths (Field/Index/Key/
+  Object_Identity/Synthetic), append/parent/prefix/subtree/concatenate/rebase,
+  total order + hashing, deterministic redaction-aware dot/bracket render.
+- `Validation.Messages` — message id + ordered typed arguments, duplicate names
+  rejected; standard message-id and argument-name constants.
+- `Validation.Metadata` — bounded ordered duplicate-controlled key/value.
+- `Validation.Source_References` — optional neutral source-reference model.
+- `Validation.Fingerprints` — deterministic FNV-1a/64 with length-prefixed
+  contributions; 16-hex format (non-cryptographic, documented).
+
+Deferred to Phase 2 (where they are actually consumed, alongside Issues and
+Results, which they are shaped around): `Validation.Provenance`, the Stopping /
+Incompleteness / Statistics descriptors, and the concrete definition/invocation
+error records (the generic `Outcomes` carrier already exists to hold them).
