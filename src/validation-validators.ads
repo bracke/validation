@@ -8,6 +8,7 @@ with Validation.Issues;
 with Validation.Errors;
 with Validation.Provenance;
 with Validation.Contexts;
+with Validation.Profiles;
 with Validation.Results;
 with Validation.Fingerprints;
 
@@ -46,12 +47,13 @@ package Validation.Validators is
       Policy          : Execution_Policy := Accumulate_All;
       Provenance_Mode : Provenance.Provenance_Mode := Provenance.Standard;
       On_Fault        : Fault_Mode := Propagate;
+      --  Active profile set (§34). Empty => no profile filtering (all rules
+      --  run). Non-empty => a rule runs iff its group is the default (unlabeled)
+      --  or is active in the set; severities are overridden per the set.
+      Profiles        : Validation.Profiles.Profile_Set;
    end record;
 
-   Default_Options : constant Execution_Options :=
-     (Policy => Accumulate_All,
-      Provenance_Mode => Provenance.Standard,
-      On_Fault => Propagate);
+   function Default_Options return Execution_Options;
 
    ---------------------------------------------------------------------------
    --  Engine-controlled rule output
@@ -141,6 +143,35 @@ package Validation.Validators is
    end Parameterized_Rules;
 
    ---------------------------------------------------------------------------
+   --  Rule decorators (return a new rule; the original is unchanged)
+   ---------------------------------------------------------------------------
+
+   --  Assign the rule to a group (§34). Unlabeled rules belong to the default
+   --  group and always run; labeled rules run only when their group is active
+   --  in the profile set.
+   function In_Group
+     (Rule : Validators.Rule; Group : Identifiers.Rule_Group_Id)
+      return Validators.Rule;
+
+   --  Run this rule only if another (earlier) local rule ran and passed (§26).
+   --  The canonical use: a length/format rule that must not run when the
+   --  required-presence rule already failed.
+   function Requires
+     (Rule : Validators.Rule; Passed : Identifiers.Rule_Id)
+      return Validators.Rule;
+
+   --  Condition wrapper (§25): applies the wrapped rule only when Condition
+   --  holds (When_Applicable) or does not hold (Unless_Applicable). The
+   --  condition is a pure applicability function and emits nothing itself.
+   generic
+      with function Condition
+        (Subject : Subject_Type; Context : Contexts.Context) return Boolean;
+   package Conditional is
+      function When_Applicable (Rule : Validators.Rule) return Validators.Rule;
+      function Unless_Applicable (Rule : Validators.Rule) return Validators.Rule;
+   end Conditional;
+
+   ---------------------------------------------------------------------------
    --  Builder and finalization
    ---------------------------------------------------------------------------
 
@@ -149,6 +180,14 @@ package Validation.Validators is
 
    function Start (Id : Identifiers.Validator_Id) return Builder;
    procedure Add (Builder : in out Validators.Builder; Rule : Validators.Rule);
+
+   --  Composition (§43): start a builder pre-loaded with a finalized
+   --  validator's rules, and remove rules by id. Component validators are
+   --  never mutated.
+   function Extend
+     (Base : Validator; Id : Identifiers.Validator_Id) return Builder;
+   procedure Disable
+     (Builder : in out Validators.Builder; Rule_Id : Identifiers.Rule_Id);
 
    type Finalization is private;
 
@@ -183,6 +222,13 @@ private
 
    type Rule_Kind is (Predicate_Kind, Field_Kind, Custom_Kind);
 
+   type Prereq_Kind is (Always, Rule_Passed);
+
+   type Prerequisite is record
+      Kind : Prereq_Kind := Always;
+      Rule : Identifiers.Rule_Id;
+   end record;
+
    type Rule_Config is record
       Rule_Id   : Identifiers.Rule_Id;
       Level     : Severity := Issues.Error;
@@ -191,6 +237,9 @@ private
       Phase     : Phases.Phase := Phases.Phase_Value;
       Kind      : Rule_Kind := Predicate_Kind;
       Field     : Identifiers.Field_Id;
+      --  Group is Null_Id for the default (always-active) group.
+      Group     : Identifiers.Rule_Group_Id;
+      Prereq    : Prerequisite;
    end record;
 
    type Rule_Node is abstract tagged record
@@ -252,6 +301,7 @@ private
       Phase         : Phases.Phase := Phases.Phase_Value;
       Decl          : Positive := 1;
       Base          : Paths.Path;
+      Profiles      : Validation.Profiles.Profile_Set;
    end record;
 
 end Validation.Validators;

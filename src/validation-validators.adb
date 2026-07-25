@@ -5,12 +5,20 @@ package body Validation.Validators is
    package Category_Ids renames Identifiers.Issue_Category_Ids;
    package Message_Ids renames Identifiers.Message_Ids;
    package Field_Ids renames Identifiers.Field_Ids;
+   package Group_Ids renames Identifiers.Rule_Group_Ids;
+   package Prof renames Validation.Profiles;
 
    use type Issues.Severity;
    use type Provenance.Provenance_Mode;
 
    function Node_Config (Item : Stored_Rule) return Rule_Config is
      (Item.Held.Element.Config);
+
+   function Default_Options return Execution_Options is
+     (Policy          => Accumulate_All,
+      Provenance_Mode => Provenance.Standard,
+      On_Fault        => Propagate,
+      Profiles        => Prof.Empty_Set);
 
    ---------------------------------------------------------------------------
    --  Rule output
@@ -23,6 +31,9 @@ package body Validation.Validators is
       Message  : Messages.Message;
       Primary  : Paths.Path)
    is
+      --  Apply any active-profile severity override (§34).
+      Effective : constant Severity :=
+        Prof.Effective_Severity (Output.Profiles, Output.Rule, Level);
       Ord  : constant Positive := Output.Ordinal + 1;
       Prov : Provenance.Provenance;
    begin
@@ -43,13 +54,13 @@ package body Validation.Validators is
       declare
          IB : constant Issues.Issue_Builder :=
            Issues.Begin_Issue
-             (Ord, Output.Validator_Id, Output.Rule, Level, Category, Primary,
-              Message, Prov);
+             (Ord, Output.Validator_Id, Output.Rule, Effective, Category,
+              Primary, Message, Prov);
       begin
          Issues.Append (Output.Issues, Issues.Build (IB));
       end;
       Output.Ordinal := Ord;
-      if Level = Issues.Error and then Output.Stop_On_Error then
+      if Effective = Issues.Error and then Output.Stop_On_Error then
          Output.Stopped := True;
       end if;
    end Emit;
@@ -164,7 +175,7 @@ package body Validation.Validators is
          N.Config :=
            (Rule_Id => Rule_Id, Level => Level, Category => Category,
             Message => Message, Phase => Phase, Kind => Field_Kind,
-            Field => Field);
+            Field => Field, others => <>);
          return (Held => Node_Holders.To_Holder (N));
       end Make;
 
@@ -243,6 +254,86 @@ package body Validation.Validators is
    end Parameterized_Rules;
 
    ---------------------------------------------------------------------------
+   --  Decorators
+   ---------------------------------------------------------------------------
+
+   function With_Config (Rule : Validators.Rule; Config : Rule_Config)
+     return Validators.Rule
+   is
+      Node : Rule_Node'Class := Rule.Held.Element;
+   begin
+      Node.Config := Config;
+      return (Held => Node_Holders.To_Holder (Node));
+   end With_Config;
+
+   function In_Group
+     (Rule : Validators.Rule; Group : Identifiers.Rule_Group_Id)
+      return Validators.Rule
+   is
+      Config : Rule_Config := Rule.Held.Element.Config;
+   begin
+      Config.Group := Group;
+      return With_Config (Rule, Config);
+   end In_Group;
+
+   function Requires
+     (Rule : Validators.Rule; Passed : Identifiers.Rule_Id)
+      return Validators.Rule
+   is
+      Config : Rule_Config := Rule.Held.Element.Config;
+   begin
+      Config.Prereq := (Kind => Rule_Passed, Rule => Passed);
+      return With_Config (Rule, Config);
+   end Requires;
+
+   package body Conditional is
+
+      type Cond_Node is new Rule_Node with record
+         Inner  : Node_Holders.Holder;
+         Negate : Boolean := False;
+      end record;
+
+      overriding procedure Apply_Node
+        (Node    : Cond_Node;
+         Subject : Subject_Type;
+         Context : Contexts.Context;
+         Output  : in out Rule_Output);
+
+      overriding procedure Apply_Node
+        (Node    : Cond_Node;
+         Subject : Subject_Type;
+         Context : Contexts.Context;
+         Output  : in out Rule_Output)
+      is
+         Applicable : Boolean := Condition (Subject, Context);
+      begin
+         if Node.Negate then
+            Applicable := not Applicable;
+         end if;
+         if Applicable then
+            Apply_Node (Node.Inner.Element, Subject, Context, Output);
+         end if;
+      end Apply_Node;
+
+      function Wrap (Rule : Validators.Rule; Negate : Boolean)
+        return Validators.Rule
+      is
+         Node : Cond_Node;
+      begin
+         Node.Config := Rule.Held.Element.Config;
+         Node.Inner := Rule.Held;
+         Node.Negate := Negate;
+         return (Held => Node_Holders.To_Holder (Node));
+      end Wrap;
+
+      function When_Applicable (Rule : Validators.Rule) return Validators.Rule is
+        (Wrap (Rule, Negate => False));
+      function Unless_Applicable (Rule : Validators.Rule) return Validators.Rule is
+        (Wrap (Rule, Negate => True));
+
+   end Conditional;
+
+   ---------------------------------------------------------------------------
    --  Builder / finalization
    ---------------------------------------------------------------------------
 
@@ -255,6 +346,26 @@ package body Validation.Validators is
         (Stored_Rule'(Held => Rule.Held,
                       Decl => Natural (Builder.Rules.Length) + 1));
    end Add;
+
+   function Extend
+     (Base : Validator; Id : Identifiers.Validator_Id) return Builder is
+     (Id => Id, Rules => Base.Rules);
+
+   procedure Disable
+     (Builder : in out Validators.Builder; Rule_Id : Identifiers.Rule_Id)
+   is
+      Position : Natural := 1;
+   begin
+      while Position <= Natural (Builder.Rules.Length) loop
+         if Rule_Ids."="
+              (Node_Config (Builder.Rules (Position)).Rule_Id, Rule_Id)
+         then
+            Builder.Rules.Delete (Position);
+         else
+            Position := Position + 1;
+         end if;
+      end loop;
+   end Disable;
 
    function Compute_Fingerprint (Item : Validator) return Fingerprints.Fingerprint
    is
@@ -335,10 +446,14 @@ package body Validation.Validators is
       Context   : Contexts.Context;
       Options   : Execution_Options := Default_Options) return Results.Result
    is
-      Count  : constant Natural := Natural (Validator.Rules.Length);
-      Order  : array (1 .. Count) of Positive;
-      Output : Rule_Output;
-      Fault  : Boolean := False;
+      type Outcome_Kind is (Ran_Passed, Ran_Failed, Was_Skipped);
+
+      Count    : constant Natural := Natural (Validator.Rules.Length);
+      Order    : array (1 .. Count) of Positive;
+      Outcomes : array (1 .. Count) of Outcome_Kind := [others => Was_Skipped];
+      Output   : Rule_Output;
+      Fault    : Boolean := False;
+      Filtering : constant Boolean := Prof.Count (Options.Profiles) > 0;
 
       function Less (A, B : Positive) return Boolean is
          Ca : constant Rule_Config := Node_Config (Validator.Rules (A));
@@ -349,11 +464,38 @@ package body Validation.Validators is
          end if;
          return Validator.Rules (A).Decl < Validator.Rules (B).Decl;
       end Less;
+
+      function Index_Of (Rule_Id : Identifiers.Rule_Id) return Natural is
+      begin
+         for I in 1 .. Count loop
+            if Rule_Ids."=" (Node_Config (Validator.Rules (I)).Rule_Id, Rule_Id)
+            then
+               return I;
+            end if;
+         end loop;
+         return 0;
+      end Index_Of;
+
+      function Group_Active (Config : Rule_Config) return Boolean is
+        (not Filtering
+         or else Group_Ids.Is_Null (Config.Group)
+         or else Prof.Is_Group_Active (Options.Profiles, Config.Group));
+
+      function Prereq_Met (Config : Rule_Config) return Boolean is
+         Index : Natural;
+      begin
+         if Config.Prereq.Kind = Always then
+            return True;
+         end if;
+         Index := Index_Of (Config.Prereq.Rule);
+         return Index /= 0 and then Outcomes (Index) = Ran_Passed;
+      end Prereq_Met;
    begin
       Output.Validator_Id := Validator.Id;
       Output.Stop_On_Error := Options.Policy = Stop_On_First_Error;
       Output.Prov_Mode := Options.Provenance_Mode;
       Output.Issues := Issues.Empty_Collection;
+      Output.Profiles := Options.Profiles;
 
       for I in 1 .. Count loop
          Order (I) := I;
@@ -378,19 +520,34 @@ package body Validation.Validators is
             Node : constant Rule_Node'Class :=
               Validator.Rules (Idx).Held.Element;
          begin
-            Output.Rule := Node.Config.Rule_Id;
-            Output.Phase := Node.Config.Phase;
-            Output.Decl := Validator.Rules (Idx).Decl;
-            Output.Base := Paths.Root;
-            if Options.On_Fault = Convert_To_Invocation_Error then
-               begin
-                  Apply_Node (Node, Subject, Context, Output);
-               exception
-                  when others =>
-                     Fault := True;
-               end;
+            if not (Group_Active (Node.Config)
+                    and then Prereq_Met (Node.Config))
+            then
+               Outcomes (Idx) := Was_Skipped;
             else
-               Apply_Node (Node, Subject, Context, Output);
+               Output.Rule := Node.Config.Rule_Id;
+               Output.Phase := Node.Config.Phase;
+               Output.Decl := Validator.Rules (Idx).Decl;
+               Output.Base := Paths.Root;
+               declare
+                  Before : constant Natural := Issues.Count (Output.Issues);
+               begin
+                  if Options.On_Fault = Convert_To_Invocation_Error then
+                     begin
+                        Apply_Node (Node, Subject, Context, Output);
+                     exception
+                        when others =>
+                           Fault := True;
+                     end;
+                  else
+                     Apply_Node (Node, Subject, Context, Output);
+                  end if;
+                  if not Fault then
+                     Outcomes (Idx) :=
+                       (if Issues.Count (Output.Issues) > Before
+                        then Ran_Failed else Ran_Passed);
+                  end if;
+               end;
             end if;
          end;
       end loop;

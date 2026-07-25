@@ -44,7 +44,7 @@ any ecosystem project. Status: `built` / `planned`.
 
 | Package | Responsibility | Status |
 |---------|----------------|--------|
-| `Validation.Validators` (generic) | Subject-typed engine: rule model (predicate/field/custom), engine-controlled output, builder/finalize, deterministic Validate, fingerprint, introspection. The rule abstraction lives inside this generic (rules are subject-typed) rather than a separate `Validation.Rules` package. | built (minimal) |
+| `Validation.Validators` (generic) | Subject-typed engine: rule model (predicate/field/custom/parameterized), engine-controlled output, builder/finalize, deterministic Validate; conditions (`Conditional`), prerequisites (`Requires`), groups (`In_Group`) + profile selection & severity override; composition (`Extend`/`Disable`); fingerprint; introspection. The rule abstraction lives inside this generic (rules are subject-typed) rather than a separate `Validation.Rules` package. `Any_Of`/`Case` deferred. | built |
 | `Validation.Standard` / `.UTF_8` / `.Text` / `.Numerics` | Actual-value disclosure policy; audited UTF-8; text length/blank/utf8; numeric min/max/range/sign — all through `Validators.Parameterized_Rules` | built |
 | `Validation.Standard.*` (temporal, enumerations, relationships, more syntax) | Remaining standard validators | planned |
 

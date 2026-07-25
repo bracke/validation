@@ -7,6 +7,14 @@ Added, Changed, Deprecated, Removed, Fixed, Security, Compatibility.
 
 ### Added
 
+- **Phase 6 — composition, conditions, prerequisites, profiles.**
+  `Validation.Validators` gains: profile selection in `Validate` (an
+  `Execution_Options.Profiles` set filters rules by group and overrides
+  severities, later-profile-wins); prerequisites (`Requires` runs a rule only
+  when an earlier local rule passed, via per-rule outcome tracking); conditions
+  (the `Conditional` generic wraps a rule as When_/Unless_Applicable);
+  decorators `In_Group` / `Requires`; and composition `Extend` / `Disable`.
+  `Any_Of`/`Case` deferred. Suite green 40/40.
 - **Phase 5 — standard scalar validators.** A new
   `Validators.Parameterized_Rules` (runtime bounds stored immutably in the node)
   enables standard validators built through the public rule abstractions.

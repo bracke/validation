@@ -12,7 +12,7 @@ check, and an example/fixture.
 | 3 | Contexts, profiles, structural metadata | **complete** |
 | 4 | Minimal typed validator engine | **complete** |
 | 5 | Standard scalar validators | **complete** |
-| 6 | Composition, conditions, prerequisites, profiles | not started |
+| 6 | Composition, conditions, prerequisites, profiles | **complete** |
 | 7 | Collections | not started |
 | 8 | Recursive objects, patch, transitions | not started |
 | 9 | Deferred validation | not started |
@@ -186,3 +186,30 @@ No validator trims, normalizes, or repairs the subject (VAL-INV-014). Deferred
 (extensible via the same mechanism): comparisons across fields, enumerations/
 membership, temporal (needs the clock capability), relationships, and more
 syntax validators (Ada identifier, hex, UUID).
+
+## Phase 6 — composition, conditions, prerequisites, profiles
+
+Builds clean; suite green (40/40). Profiles are now wired into the engine and
+rules gain conditions, prerequisites, groups, and composition — all as additions
+to `Validation.Validators`.
+
+- **Profile selection**: `Execution_Options` carries a `Profile_Set`. Empty set
+  => no filtering (all rules run). Non-empty => a rule runs iff its group is the
+  default (unlabeled) or is active in the set. Emitted issues have their severity
+  overridden per the set (later profile wins), which also affects
+  Stop_On_First_Error. Profiles never reorder rules (VAL-INV-010).
+- **Prerequisites** (§26 subset): `Requires (rule, other)` runs a rule only if an
+  earlier local rule ran and passed. The engine tracks per-rule outcomes
+  (passed/failed/skipped) in execution order — the canonical guard that stops a
+  length rule cascading after the required-presence rule already failed.
+- **Conditions** (§25): the `Conditional` generic wraps a rule so it applies only
+  When_Applicable / Unless_Applicable a pure condition holds. The wrapper copies
+  the inner rule's config (so id/phase/group/attribution are preserved) and
+  dispatches to the inner node when applicable.
+- **Decorators**: `In_Group`, `Requires` — return a new rule with modified config
+  (the node is copied and its config tweaked; originals are unchanged).
+- **Composition** (§43): `Extend` starts a builder from a finalized validator's
+  rules; `Disable` removes rules by id. Component validators are never mutated.
+
+Deferred: `Any_Of` (§44) and `Case` selection — larger branch-evaluation
+semantics that belong with a follow-on; noted for a later increment.
