@@ -14,7 +14,7 @@ check, and an example/fixture.
 | 5 | Standard scalar validators | **complete** |
 | 6 | Composition, conditions, prerequisites, profiles | **complete** |
 | 7 | Collections | **complete** |
-| 8 | Recursive objects, patch, transitions | not started |
+| 8 | Recursive objects, patch, transitions | **complete** |
 | 9 | Deferred validation | not started |
 | 10 | Complete diagnostics | not started |
 | 11 | Hardening | not started |
@@ -242,3 +242,27 @@ bucket order, VAL-INV-021). Tested against an `Ada.Containers.Vectors` adapter.
 Deferred: ordering validators, map key/value validation, and full nested-record
 element validation (needs the Phase 8 rebasing machinery); collection limits are
 carried by the incompleteness model but not yet enforced per-element.
+
+## Phase 8 — recursive objects, nesting, transitions
+
+Builds clean; suite green (49/49). The enabler is issue REBASING —
+`Issues.Rebased` (a copy under an absolute prefix with a fresh ordinal) and the
+engine hook `Validators.Add_Rebased_Issue`.
+
+- `Validation.Nested` (generic) — runs a sub-validator on a nested record field
+  and embeds its issues rebased under the field path (e.g. `$.address.postcode`),
+  preserving the nested validator/rule identity. The `Optional` child handles
+  §36 presence: absent optional skips the nested validator; absent required
+  emits one presence issue.
+- `Validation.Recursive` (generic) — validates a recursive structure with
+  active-path CYCLE DETECTION keyed on a caller-supplied stable Identity (never a
+  pointer, VAL-INV-015). Cycle actions: Report_Issue_And_Skip (a graph.cycle
+  issue with a related path to the first occurrence), Skip_Silently,
+  Invocation_Failure. Depth and visit limits produce controlled incompleteness
+  (VAL-INV-016), never an infinite loop. Node issues are rebased under
+  `children[i].children[j]...`.
+
+Object final rules need nothing new — declare a Custom rule with Phase_Final.
+Transitions are modelled as an ordinary subject with old/new fields; no
+dedicated package. Deferred: change-set-driven selection and a packaged
+optional-state adapter (the Optional child covers present/absent).

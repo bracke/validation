@@ -7,6 +7,14 @@ Added, Changed, Deprecated, Removed, Fixed, Security, Compatibility.
 
 ### Added
 
+- **Phase 8 — recursive objects, nesting, transitions.** Issue rebasing —
+  `Issues.Rebased` + the engine hook `Validators.Add_Rebased_Issue`.
+  `Validation.Nested` (generic) embeds a sub-validator's issues under a nested
+  field path, with an `Optional` child for §36 presence semantics.
+  `Validation.Recursive` (generic) validates recursive structures with
+  active-path cycle detection (caller-supplied stable identity, never a pointer),
+  cycle actions (report/skip/fail), and depth/visit limits that yield controlled
+  incompleteness. Suite green 49/49.
 - **Phase 7 — collections.** `Validation.Collections` (generic, adapter-driven):
   cardinality (min/max/exact count), per-element predicate (issue per failing
   element at `field[i]`), uniqueness (typed key projection, one issue per

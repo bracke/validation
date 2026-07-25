@@ -95,6 +95,20 @@ package body Validation.Validators is
             Paths.Append_Field (Output.Base, Field), []);
    end Add_Issue_At_Field;
 
+   procedure Add_Rebased_Issue
+     (Output : in out Rule_Output;
+      Source : Issues.Issue;
+      Under  : Paths.Path)
+   is
+      Ord : constant Positive := Output.Ordinal + 1;
+   begin
+      Issues.Append (Output.Issues, Issues.Rebased (Source, Under, Ord));
+      Output.Ordinal := Ord;
+      if Issues.Level (Source) = Issues.Error and then Output.Stop_On_Error then
+         Output.Stopped := True;
+      end if;
+   end Add_Rebased_Issue;
+
    procedure Add_Issue_With_Related
      (Output        : in out Rule_Output;
       Level         : Severity;

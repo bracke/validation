@@ -125,6 +125,14 @@ package Validation.Issues is
 
    overriding function "=" (Left, Right : Issue) return Boolean;
 
+   --  A copy of Source with its primary and related paths rebased under Under
+   --  (an absolute prefix, e.g. $.child[2]) and a fresh ordinal. Used to embed a
+   --  nested or recursive sub-validator's issues into a parent result while
+   --  preserving the originating validator, rule, severity, category, and
+   --  message. The Issue_Identity is recomputed from the rebased content.
+   function Rebased
+     (Source : Issue; Under : Paths.Path; New_Ordinal : Positive) return Issue;
+
    ---------------------------------------------------------------------------
    --  Issue collection (ordered, bounded, deterministic)
    ---------------------------------------------------------------------------

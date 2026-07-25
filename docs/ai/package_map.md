@@ -53,6 +53,8 @@ any ecosystem project. Status: `built` / `planned`.
 | Package | Responsibility | Status |
 |---------|----------------|--------|
 | `Validation.Collections` (generic) | Cardinality, per-element predicate, uniqueness (typed key + related path), quantifiers, aggregate — over a `Count`/`Item` adapter; canonical order required for hashed containers. Ordering/map-key-value/nested-element deferred. | built |
+| `Validation.Nested` (generic) | Nested + optional-presence object validation, issues rebased under the field path | built |
+| `Validation.Recursive` (generic) | Recursive tree validation with active-path cycle detection, cycle actions, depth/visit limits | built |
 | `Validation.Deferred` (+ `.Requests`/`.Results`/`.Continuations`/`.Batching`/`.Synchronous`) | Externally-executed checks, replay, batching | planned |
 | `Validation.Introspection` | Immutable structural introspection | planned |
 | `Validation.Adapters.*` | Optional external adapters (never core deps) | planned |

@@ -26,7 +26,7 @@ owning package exists) covered by tests. Status legend:
 | VAL-INV-013 | Validation never mutates the subject | Validation.Validators | proven |
 | VAL-INV-014 | Validation never silently normalizes/repairs/trims/canonicalizes/defaults | Validation.Standard | proven |
 | VAL-INV-015 | No externally observable identity from an access value or memory address | Validation.Paths/Contexts | prototyped |
-| VAL-INV-016 | Limit exhaustion is explicit controlled incompleteness | Validation.Results | prototyped |
+| VAL-INV-016 | Limit exhaustion is explicit controlled incompleteness | Validation.Results/Recursive | proven |
 | VAL-INV-017 | Missing required context capabilities are invocation errors, not issues | Validation.Contexts | planned |
 | VAL-INV-018 | Infrastructure failure is not ordinary invalidity unless a rule policy maps it | Validation.Deferred | planned |
 | VAL-INV-019 | No HTTP/DB/file/network/scheduler/queue/UI operations | (whole core) | proven* |

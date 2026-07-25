@@ -192,6 +192,31 @@ package body Validation.Issues is
       return True;
    end "=";
 
+   function Rebased
+     (Source : Issue; Under : Paths.Path; New_Ordinal : Positive) return Issue
+   is
+      B : Issue_Builder :=
+        Begin_Issue
+          (New_Ordinal, Source.Validator, Source.Rule, Source.Level,
+           Source.Category, Paths.Rebase (Source.Primary, Paths.Root, Under),
+           Source.Message, Source.Prov);
+      Added : Boolean;
+   begin
+      for Position in 1 .. Natural (Source.Related.Length) loop
+         Add_Related_Path
+           (B, Paths.Rebase (Source.Related (Position), Paths.Root, Under),
+            Added);
+      end loop;
+      if Source.Machine_Set then
+         Set_Machine_Code (B, Source.Machine);
+      end if;
+      Set_Metadata (B, Source.Meta);
+      if Source.Source_Set then
+         Set_Source (B, Source.Source_Ref);
+      end if;
+      return Build (B);
+   end Rebased;
+
    ---------------------------------------------------------------------------
    --  Collection
    ---------------------------------------------------------------------------

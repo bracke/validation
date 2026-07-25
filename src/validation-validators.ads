@@ -78,6 +78,14 @@ package Validation.Validators is
       Category : Identifiers.Issue_Category_Id;
       Message  : Messages.Message);
 
+   --  Embed a nested/recursive sub-validator's issue into this result, rebasing
+   --  its paths under Under (an absolute prefix, e.g. $.child[2]). Preserves the
+   --  source issue's validator, rule, severity, category, and message.
+   procedure Add_Rebased_Issue
+     (Output : in out Rule_Output;
+      Source : Issues.Issue;
+      Under  : Paths.Path);
+
    type Path_Array is array (Positive range <>) of Paths.Path;
 
    --  As Add_Issue, but also attaches related (typically absolute) paths, e.g.
