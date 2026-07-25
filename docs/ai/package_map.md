@@ -44,8 +44,7 @@ any ecosystem project. Status: `built` / `planned`.
 
 | Package | Responsibility | Status |
 |---------|----------------|--------|
-| `Validation.Rules` | Rule abstraction + engine-controlled output interface | planned (node storage **prototyped**) |
-| `Validation.Validators` (+ `.Builders`/`.Fields`/`.Nested`/`.Objects`) | Subject-typed validators; finalization; composition | planned |
+| `Validation.Validators` (generic) | Subject-typed engine: rule model (predicate/field/custom), engine-controlled output, builder/finalize, deterministic Validate, fingerprint, introspection. The rule abstraction lives inside this generic (rules are subject-typed) rather than a separate `Validation.Rules` package. | built (minimal) |
 | `Validation.Standard.*` | Presence, comparisons, numerics, text, UTF_8, enumerations, temporal, relationships, syntax | planned |
 
 ## Collections, recursion, deferred, diagnostics (Phases 7–10)

@@ -10,7 +10,7 @@ check, and an example/fixture.
 | 1 | Foundational value layer | **complete** |
 | 2 | Issues, results, and projections | **complete** |
 | 3 | Contexts, profiles, structural metadata | **complete** |
-| 4 | Minimal typed validator engine | not started |
+| 4 | Minimal typed validator engine | **complete** |
 | 5 | Standard scalar validators | not started |
 | 6 | Composition, conditions, prerequisites, profiles | not started |
 | 7 | Collections | not started |
@@ -132,3 +132,34 @@ deterministically and are independently testable (the phase criterion).
 Deferred to later phases: context overlays (§33) and context projections; the
 standard capability patterns (clock/locale/tenant/...) are application-defined
 instances, not core packages, per §33.
+
+## Phase 4 — complete
+
+The minimal typed validator engine builds clean; suite green (31/31). An
+application-defined record (Customer) validates end to end through the public
+API (the phase criterion).
+
+`Validation.Validators` (generic over Subject_Type) provides:
+
+- An engine-controlled `Rule_Output`: rules emit issues only through
+  `Add_Issue` / `Add_Issue_At_Field`; the engine supplies validator id, rule id,
+  ordinal, and provenance (VAL-INV-007, VAL-INV-026). Rules never construct
+  issues directly and never mutate the subject (VAL-INV-013). The per-invocation
+  state lives by value in the limited output object (no global state, no address
+  identity).
+- Three rule constructors, each capturing its callback by generic instantiation
+  into an immutable class-wide node (ADR-014): `Predicate_Rules` (whole-subject),
+  `Field_Rules` (field accessor + predicate), and `Custom_Rules` (emits through
+  Rule_Output).
+- `Start` / `Add` / `Finalize`: finalization rejects a duplicate rule id and an
+  empty validator id as definition errors.
+- `Validate`: deterministic execution order by (phase ordinal, declaration
+  ordinal) (VAL-INV-008/009); Accumulate_All and Stop_On_First_Error; callback
+  faults optionally converted to an invocation error at the callback boundary
+  only (§29); a validator fingerprint; and Result assembly with derived
+  validity.
+- Introspection: id, rule count, fingerprint.
+
+The rule model was built inside the Validators generic (rather than a separate
+`Validation.Rules` package) because rules are subject-typed and tightly coupled
+to the engine; documented in docs/ai/package_map.md.

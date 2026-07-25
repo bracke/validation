@@ -7,6 +7,16 @@ Added, Changed, Deprecated, Removed, Fixed, Security, Compatibility.
 
 ### Added
 
+- **Phase 4 — minimal typed validator engine.** `Validation.Validators`
+  (generic over the subject type): an engine-controlled `Rule_Output` (rules
+  emit only through Add_Issue/Add_Issue_At_Field; the engine supplies validator/
+  rule/ordinal/provenance); predicate, field-accessor, and custom rule
+  constructors captured by generic instantiation into immutable class-wide
+  nodes; builder + finalize (rejecting duplicate rule id and empty validator
+  id); deterministic Validate by (phase, declaration) order with Accumulate_All
+  and Stop_On_First_Error; callback-fault conversion at the callback boundary; a
+  validator fingerprint; and introspection. An application record validates end
+  to end through the public API. Suite green 31/31.
 - **Phase 3 — contexts and profiles.** `Validation.Contexts` — the real typed-
   capability container (promoting the Phase 0 prototype): trust provenance,
   schema/ownership/sensitivity/continuation metadata, trust-aware retrieval
