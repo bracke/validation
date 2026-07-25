@@ -37,8 +37,8 @@ any ecosystem project. Status: `built` / `planned`.
 
 | Package | Responsibility | Status |
 |---------|----------------|--------|
-| `Validation.Contexts` (+ `.Capabilities`/`.Builders`/`.Overlays`/`.Projections`) | Finalized immutable typed-capability container; contracts; trust provenance | planned (storage **prototyped**) |
-| `Validation.Profiles` | Profiles, rule groups, inheritance, precedence, severity overrides | planned |
+| `Validation.Contexts` | Finalized immutable typed-capability container; contracts; trust provenance; fingerprint (overlays/projections deferred) | built |
+| `Validation.Profiles` | Profiles, rule groups, inheritance-by-composition, precedence, severity overrides | built |
 
 ## Engine, rules, standard validators (Phases 4–6)
 

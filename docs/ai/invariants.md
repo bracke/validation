@@ -12,15 +12,15 @@ owning package exists) covered by tests. Status legend:
 | ID | Invariant | Owner (planned) | Status |
 |----|-----------|-----------------|--------|
 | VAL-INV-001 | Finalized validators are immutable | Validation.Validators | planned |
-| VAL-INV-002 | Finalized contexts are immutable | Validation.Contexts | prototyped |
-| VAL-INV-003 | Finalized profiles are immutable | Validation.Profiles | planned |
+| VAL-INV-002 | Finalized contexts are immutable | Validation.Contexts | proven |
+| VAL-INV-003 | Finalized profiles are immutable | Validation.Profiles | proven |
 | VAL-INV-004 | Issues and results are immutable | Validation.Issues/Results | proven |
 | VAL-INV-005 | Ordinary validation failure never uses exceptions | Validation.Results | proven |
 | VAL-INV-006 | Every issue has exactly one valid primary path | Validation.Issues | proven |
 | VAL-INV-007 | Every issue identifies its originating validator and rule | Validation.Issues | proven |
 | VAL-INV-008 | Execution order is deterministic for identical inputs | Validation.Internal.* | planned |
 | VAL-INV-009 | Issue order is deterministic for identical inputs | Validation.Internal.Issue_Accumulation | planned |
-| VAL-INV-010 | Profiles suppress/configure but never reorder surviving rules | Validation.Profiles | planned |
+| VAL-INV-010 | Profiles suppress/configure but never reorder surviving rules | Validation.Profiles | proven |
 | VAL-INV-011 | Deferred result arrival order does not affect output | Validation.Deferred | planned |
 | VAL-INV-012 | Unknown/duplicate/stale/incompatible deferred results never silently accepted | Validation.Deferred | planned |
 | VAL-INV-013 | Validation never mutates the subject | Validation.Validators | planned |
@@ -46,7 +46,7 @@ owning package exists) covered by tests. Status legend:
 | VAL-INV-033 | Authz Deny/Not_Applicable/Indeterminate never represented as Validation issues/validity | Validation.Results | planned |
 | VAL-INV-034 | Identity auth failures never decomposed into disclosure-unsafe diagnostics | Validation.Adapters | planned |
 | VAL-INV-035 | Secret credential material never enters values/args/paths/provenance/fingerprints/traces/deferred | Validation.Values | planned |
-| VAL-INV-036 | Fact trust provenance preserved; untrusted proposed values cannot satisfy trusted requirements | Validation.Contexts | planned |
+| VAL-INV-036 | Fact trust provenance preserved; untrusted proposed values cannot satisfy trusted requirements | Validation.Contexts | proven |
 | VAL-INV-037 | Identity/Authorization identifiers stay distinct; explicit checked adapters only | Validation.Identifiers | planned |
 | VAL-INV-038 | Identity/Authz-dependent continuations bind the relevant revisions | Validation.Deferred | planned |
 | VAL-INV-039 | Validating obligation data does not prove the obligation satisfied/enforced | Validation.Adapters | planned |

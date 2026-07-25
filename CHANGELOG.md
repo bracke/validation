@@ -7,6 +7,15 @@ Added, Changed, Deprecated, Removed, Fixed, Security, Compatibility.
 
 ### Added
 
+- **Phase 3 — contexts and profiles.** `Validation.Contexts` — the real typed-
+  capability container (promoting the Phase 0 prototype): trust provenance,
+  schema/ownership/sensitivity/continuation metadata, trust-aware retrieval
+  (untrusted values cannot satisfy trusted requests, VAL-INV-036), duplicate/
+  version rejection, insertion-order-independent fingerprint, context token, and
+  contract checking. `Validation.Profiles` — group activation, severity
+  overrides, inheritance by composition (cycles impossible by construction),
+  Conflicting_Override detection at Finalize, and a Profile_Set with
+  later-profile-wins precedence and union group activation. Suite green 24/24.
 - **Phase 2 — issues, results, projections.** `Validation.Phases`,
   `Validation.Provenance` (Minimal/Standard), `Validation.Statistics`,
   `Validation.Errors` (definition/invocation domains with stable dotted keys),

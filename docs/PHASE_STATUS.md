@@ -9,7 +9,7 @@ check, and an example/fixture.
 | 0 | Repository & feasibility prototypes | **complete** |
 | 1 | Foundational value layer | **complete** |
 | 2 | Issues, results, and projections | **complete** |
-| 3 | Contexts, profiles, structural metadata | not started |
+| 3 | Contexts, profiles, structural metadata | **complete** |
 | 4 | Minimal typed validator engine | not started |
 | 5 | Standard scalar validators | not started |
 | 6 | Composition, conditions, prerequisites, profiles | not started |
@@ -106,3 +106,29 @@ Tests build and compare complete deterministic outputs before any engine exists
 - `Validation.Projections` — compact issue projection + result summary (v1),
   the deterministic outputs external serializers consume. Standard/diagnostic
   projections and By_Path/By_Object_Key/By_Source groupings land in Phase 10.
+
+## Phase 3 — complete
+
+Contexts and profiles build clean; suite green (24/24). Both resolve
+deterministically and are independently testable (the phase criterion).
+
+- `Validation.Contexts` — promotes the Phase 0 storage prototype (ADR-015) to
+  the real typed-capability container. Each capability carries capability id,
+  schema id + version, TRUST PROVENANCE, sensitivity, ownership, fingerprint-
+  contribution policy, and continuation-safety. Retrieval is trust-aware: a
+  `Proposed_Untrusted_Value` cannot satisfy a `Trusted_Facts` request even when
+  the Ada type and id text match (VAL-INV-036, tested). Duplicate-id and
+  schema-version rejection; an insertion-order-independent deterministic
+  fingerprint (VAL-INV-021); context token; and a context-contract check that
+  reports missing / version-mismatch / trust-mismatch as invocation errors.
+- `Validation.Profiles` — profiles activate rule groups and override rule
+  severities; never reorder rules (VAL-INV-010). Inheritance is by COMPOSITION
+  (Extend from a finalized parent), which makes inheritance cycles impossible by
+  construction (a documented simplification of §34's id-based-inheritance model;
+  the retained definition error is Conflicting_Override, detected at Finalize).
+  A Profile_Set resolves severity by "later profile wins" precedence and group
+  activation by union; profile fingerprints are deterministic.
+
+Deferred to later phases: context overlays (§33) and context projections; the
+standard capability patterns (clock/locale/tenant/...) are application-defined
+instances, not core packages, per §33.
