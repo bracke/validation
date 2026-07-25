@@ -21,8 +21,8 @@ owning package exists) covered by tests. Status legend:
 | VAL-INV-008 | Execution order is deterministic for identical inputs | Validation.Validators | proven |
 | VAL-INV-009 | Issue order is deterministic for identical inputs | Validation.Validators | proven |
 | VAL-INV-010 | Profiles suppress/configure but never reorder surviving rules | Validation.Profiles | proven |
-| VAL-INV-011 | Deferred result arrival order does not affect output | Validation.Deferred | planned |
-| VAL-INV-012 | Unknown/duplicate/stale/incompatible deferred results never silently accepted | Validation.Deferred | planned |
+| VAL-INV-011 | Deferred result arrival order does not affect output | Validation.Deferred | proven |
+| VAL-INV-012 | Unknown/duplicate/stale/incompatible deferred results never silently accepted | Validation.Deferred | proven |
 | VAL-INV-013 | Validation never mutates the subject | Validation.Validators | proven |
 | VAL-INV-014 | Validation never silently normalizes/repairs/trims/canonicalizes/defaults | Validation.Standard | proven |
 | VAL-INV-015 | No externally observable identity from an access value or memory address | Validation.Paths/Contexts | prototyped |
@@ -40,7 +40,7 @@ owning package exists) covered by tests. Status legend:
 | VAL-INV-027 | A rule callback cannot spoof another rule's validator/rule identity or provenance | Validation.Internal.Rule_Dispatch | planned |
 | VAL-INV-028 | Finalized validators do not retain builder-local temporaries | Validation.Validators | prototyped |
 | VAL-INV-029 | Deferred request payloads obey explicit ownership rules beyond the call | Validation.Deferred | planned |
-| VAL-INV-030 | Continuation compatibility binds fingerprint/subject/context/profiles/options/schema/request ids | Validation.Deferred | planned |
+| VAL-INV-030 | Continuation compatibility binds fingerprint/subject/context/profiles/options/schema/request ids | Validation.Deferred | proven |
 | VAL-INV-031 | Never verifies credentials, authenticates, throttles, issues sessions, or mutates Identity | (whole core) | proven* |
 | VAL-INV-032 | Never evaluates authorization, grants access, derives scopes, satisfies obligations | (whole core) | proven* |
 | VAL-INV-033 | Authz Deny/Not_Applicable/Indeterminate never represented as Validation issues/validity | Validation.Results | planned |

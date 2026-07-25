@@ -15,7 +15,7 @@ check, and an example/fixture.
 | 6 | Composition, conditions, prerequisites, profiles | **complete** |
 | 7 | Collections | **complete** |
 | 8 | Recursive objects, patch, transitions | **complete** |
-| 9 | Deferred validation | not started |
+| 9 | Deferred validation | **complete** |
 | 10 | Complete diagnostics | not started |
 | 11 | Hardening | not started |
 | 12 | Documentation and release | not started |
@@ -266,3 +266,25 @@ Object final rules need nothing new — declare a Custom rule with Phase_Final.
 Transitions are modelled as an ordinary subject with old/new fields; no
 dedicated package. Deferred: change-set-driven selection and a packaged
 optional-state adapter (the Optional child covers present/absent).
+
+## Phase 9 — deferred validation
+
+Builds clean; suite green (54/54). `Validation.Deferred` (generic over a
+single deferred check family) WRAPS the engine rather than rewiring it:
+
+- `Start` runs the immediate validator, emits one typed request per subject item
+  (each targeting a path), and returns a Pending result plus a `Continuation`
+  binding the validator fingerprint, a caller subject token, and the context
+  fingerprint (§50).
+- `Resume` rejects a stale/incompatible continuation as `Stale_Continuation`
+  (VAL-INV-030); rejects unknown and duplicate results (VAL-INV-012); then does
+  a DETERMINISTIC REPLAY of the immediate validator and interprets each result
+  into an issue at the request's path. Result arrival order never affects the
+  outcome (VAL-INV-011); a missing result leaves it Pending (Require_All).
+- `Synchronous` (§55) runs the whole lifecycle in-process through a caller
+  handler — validate → execute every request → resume.
+
+The core deliberately covers one check family with an in-process, Require_All
+lifecycle. Documented generalizations (not built): the heterogeneous multi-check
+opaque-payload model (§47), batching/splitting (§53), multi-round follow-ups
+(§54), deduplication, and externally-serializable continuations (§48).

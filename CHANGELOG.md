@@ -7,6 +7,13 @@ Added, Changed, Deprecated, Removed, Fixed, Security, Compatibility.
 
 ### Added
 
+- **Phase 9 — deferred validation.** `Validation.Deferred` (generic, one check
+  family) wraps the engine: `Start` runs the immediate validator, emits typed
+  requests, and returns Pending + a continuation binding the validator/context
+  fingerprints and a subject token; `Resume` rejects stale/unknown/duplicate
+  results and interprets supplied results by deterministic replay (arrival order
+  independent, Require_All); a `Synchronous` adapter runs the whole lifecycle
+  in-process. Suite green 54/54.
 - **Phase 8 — recursive objects, nesting, transitions.** Issue rebasing —
   `Issues.Rebased` + the engine hook `Validators.Add_Rebased_Issue`.
   `Validation.Nested` (generic) embeds a sub-validator's issues under a nested
