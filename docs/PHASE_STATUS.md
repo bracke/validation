@@ -16,7 +16,7 @@ check, and an example/fixture.
 | 7 | Collections | **complete** |
 | 8 | Recursive objects, patch, transitions | **complete** |
 | 9 | Deferred validation | **complete** |
-| 10 | Complete diagnostics | not started |
+| 10 | Complete diagnostics | **complete** |
 | 11 | Hardening | not started |
 | 12 | Documentation and release | not started |
 
@@ -288,3 +288,25 @@ The core deliberately covers one check family with an in-process, Require_All
 lifecycle. Documented generalizations (not built): the heterogeneous multi-check
 opaque-payload model (§47), batching/splitting (§53), multi-round follow-ups
 (§54), deduplication, and externally-serializable continuations (§48).
+
+## Phase 10 — complete diagnostics
+
+Builds clean; suite green (58/58). Extends `Validation.Projections` and
+`Validation.Results`:
+
+- `Projections.Standard` — the standard issue projection (compact fields plus
+  category, validator/rule ids, and related/argument/metadata counts and
+  provenance mode).
+- `Projections.Canonical_Order` — a deterministic issue order (by path, then
+  severity, then rule, then message, then ordinal) that does not mutate
+  execution order (§56/§57).
+- `Projections.Distinct_Paths` — the distinct rendered primary paths in sorted
+  order; combine with `Results.Issues_At_Exact_Path` for By_Path grouping.
+- `Results.Issue_Set_Fingerprint` + `Results.Same_Issue_Set` — an
+  order-INDEPENDENT canonical fingerprint (sorts issue identities), distinct from
+  the execution-order `Semantic_Fingerprint`.
+
+Deferred: the diagnostic projection with an execution TRACE (the trace itself is
+not built — it is non-semantic, §14/§58), the By_Object_Key / By_Source
+groupings, related-path mirroring, and in-projection redaction policy knobs
+(paths already render redaction-aware).

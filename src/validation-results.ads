@@ -167,6 +167,12 @@ package Validation.Results is
 
    function Semantic_Fingerprint (Item : Result) return Fingerprints.Fingerprint;
 
+   --  Order-INDEPENDENT canonical fingerprint of the issue set + validity: two
+   --  results with the same issues in any order fingerprint equally (§57).
+   function Issue_Set_Fingerprint (Item : Result) return Fingerprints.Fingerprint;
+
+   function Same_Issue_Set (Left, Right : Result) return Boolean;
+
 private
 
    package Error_Vectors is new Ada.Containers.Vectors

@@ -31,7 +31,7 @@ any ecosystem project. Status: `built` / `planned`.
 |---------|----------------|--------|
 | `Validation.Issues` | Immutable issue + engine-controlled builder + collection | built |
 | `Validation.Results` | Execution_Status × Semantic_Validity, coverage, queries, semantic fingerprints | built |
-| `Validation.Projections` | Compact issue + result summary (v1) built; `.By_Path`/`.By_Object_Key`/`.By_Source` + standard/diagnostic projections planned (Phase 10) | partial |
+| `Validation.Projections` | Compact + standard issue projections, result summary, canonical ordering, distinct-path grouping. Diagnostic-with-trace / By_Object_Key / By_Source deferred. | built |
 
 ## Contexts & profiles (Phase 3)
 

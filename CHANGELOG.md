@@ -7,6 +7,12 @@ Added, Changed, Deprecated, Removed, Fixed, Security, Compatibility.
 
 ### Added
 
+- **Phase 10 — complete diagnostics.** `Projections.Standard` (standard issue
+  projection), `Projections.Canonical_Order` (deterministic issue ordering
+  without mutating execution order), `Projections.Distinct_Paths` (sorted
+  distinct primary paths for By_Path grouping), and `Results.Issue_Set_Fingerprint`
+  / `Results.Same_Issue_Set` (order-independent canonical fingerprint). Suite
+  green 58/58.
 - **Phase 9 — deferred validation.** `Validation.Deferred` (generic, one check
   family) wraps the engine: `Start` runs the immediate validator, emits typed
   requests, and returns Pending + a continuation binding the validator/context

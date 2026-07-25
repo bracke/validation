@@ -258,4 +258,44 @@ package body Validation.Results is
       return Fingerprints.Finish (B);
    end Semantic_Fingerprint;
 
+   function Issue_Set_Fingerprint
+     (Item : Result) return Fingerprints.Fingerprint
+   is
+      Count  : constant Natural := Issue_Count (Item);
+      subtype Id_Image is String (1 .. 16);
+      Images : array (1 .. Count) of Id_Image;
+      B      : Fingerprints.Builder := Fingerprints.Start;
+   begin
+      for I in 1 .. Count loop
+         Images (I) :=
+           Issue_Ops.Image (Issue_Ops.Identity (Issue_At (Item, I)));
+      end loop;
+      --  Sort the identities so arrival/execution order does not matter.
+      for I in 2 .. Count loop
+         declare
+            Key : constant Id_Image := Images (I);
+            J   : Integer := I - 1;
+         begin
+            while J >= 1 and then Key < Images (J) loop
+               Images (J + 1) := Images (J);
+               J := J - 1;
+            end loop;
+            Images (J + 1) := Key;
+         end;
+      end loop;
+      Fingerprints.Add_Tag (B, "validity");
+      Fingerprints.Add_Natural (B, Semantic_Validity'Pos (Item.Validity));
+      Fingerprints.Add_Tag (B, "issue-set");
+      for I in 1 .. Count loop
+         Fingerprints.Add_String (B, Images (I));
+      end loop;
+      return Fingerprints.Finish (B);
+   end Issue_Set_Fingerprint;
+
+   function Same_Issue_Set (Left, Right : Result) return Boolean is
+      use type Fingerprints.Fingerprint;
+   begin
+      return Issue_Set_Fingerprint (Left) = Issue_Set_Fingerprint (Right);
+   end Same_Issue_Set;
+
 end Validation.Results;
