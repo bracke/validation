@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Determinism controls: pin timezone/locale so semantic snapshots stay stable
+# (spec §68). Random seeds / hash construction are controlled in-suite.
+env:
+  TZ: UTC
+  LC_ALL: C
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Alire
+        uses: alire-project/setup-alire@v4
+
+      - name: Build library
+        run: alr --non-interactive build
+
+      - name: Build and run tests
+        run: |
+          cd tests
+          alr --non-interactive build
+          ./bin/tests

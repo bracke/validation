@@ -1,0 +1,28 @@
+name = "validation"
+description = "Headless, deterministic, strongly typed validation engine for Ada 2022"
+version = "0.1.0-dev"
+
+authors = ["Bent Bracke"]
+maintainers = ["Bent Bracke <bent@bracke.dk>"]
+maintainers-logins = ["bracke"]
+licenses = "MIT OR Apache-2.0 WITH LLVM-exception"
+website = "https://github.com/bracke/validation"
+
+tags = ["validation", "headless", "data-quality"]
+
+# Validation is a leaf library: it depends only on the Ada standard library.
+# It must never depend on Forms, Tables, Webframework, Database, Identity,
+# Authorization, i18n, Humanize, or any other ecosystem project (see docs/ai/
+# allowed_dependencies.md). Consumers depend on Validation, never the reverse.
+[[depends-on]]
+gnat_native = "=15.2.1"
+
+[[actions]]
+type = "test"
+command = ["sh", "-c", "cd tests && alr build && ./bin/tests"]
+
+# Build dependencies in the development profile (-Og) too, not the default
+# release (-O3), so roots that share these crates share object files rather
+# than forcing each other into full rebuilds.
+[build-profiles]
+"*" = "development"
