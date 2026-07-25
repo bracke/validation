@@ -8,7 +8,7 @@ check, and an example/fixture.
 |-------|-------|--------|
 | 0 | Repository & feasibility prototypes | **complete** |
 | 1 | Foundational value layer | **complete** |
-| 2 | Issues, results, and projections | not started |
+| 2 | Issues, results, and projections | **complete** |
 | 3 | Contexts, profiles, structural metadata | not started |
 | 4 | Minimal typed validator engine | not started |
 | 5 | Standard scalar validators | not started |
@@ -78,3 +78,31 @@ Deferred to Phase 2 (where they are actually consumed, alongside Issues and
 Results, which they are shaped around): `Validation.Provenance`, the Stopping /
 Incompleteness / Statistics descriptors, and the concrete definition/invocation
 error records (the generic `Outcomes` carrier already exists to hold them).
+
+## Phase 2 — complete
+
+Issues, results, and the neutral projections build clean; suite green (19/19).
+Tests build and compare complete deterministic outputs before any engine exists
+(the phase completion criterion). Packages delivered:
+
+- `Validation.Phases` — the canonical execution phases (shared).
+- `Validation.Provenance` — Minimal + Standard provenance (validator/rule/
+  ordinal, plus root/nested-chain/phase/declaration-ordinal/profiles).
+- `Validation.Statistics` — deterministic semantic execution counters.
+- `Validation.Errors` — definition/invocation error records with a stable
+  dotted key (e.g. `invocation.missing_capability`), strictly distinct from
+  ordinary issues (VAL-INV-025).
+- `Validation.Issues` — immutable issue with exactly one primary path
+  (VAL-INV-006), originating validator+rule (VAL-INV-007), an engine-controlled
+  builder (rules never construct issues directly), deterministic Issue_Identity
+  (FNV-1a over stable content + issue-id format version, §12), duplicate-
+  controlled bounded related paths, standard category constants, and a bounded
+  ordered issue collection with severity counts.
+- `Validation.Results` — Execution_Status × Semantic_Validity (validity DERIVED
+  from status + issues so the dimensions can't disagree), coverage, stop and
+  incompleteness descriptors, statistics, fingerprints; the §57 query surface
+  (counts, severity, path/rule/validator/category filters, invocation-error and
+  incompleteness accessors) and a deterministic semantic fingerprint.
+- `Validation.Projections` — compact issue projection + result summary (v1),
+  the deterministic outputs external serializers consume. Standard/diagnostic
+  projections and By_Path/By_Object_Key/By_Source groupings land in Phase 10.

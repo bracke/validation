@@ -1,5 +1,6 @@
 with Proto_Tests;
 with Foundation_Tests;
+with Result_Tests;
 
 package body All_Suites is
 
@@ -9,6 +10,7 @@ package body All_Suites is
    begin
       Proto_Tests.Add_Tests (Result);
       Foundation_Tests.Add_Tests (Result);
+      Result_Tests.Add_Tests (Result);
       return Result;
    end Suite;
 

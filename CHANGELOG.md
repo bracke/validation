@@ -7,6 +7,16 @@ Added, Changed, Deprecated, Removed, Fixed, Security, Compatibility.
 
 ### Added
 
+- **Phase 2 — issues, results, projections.** `Validation.Phases`,
+  `Validation.Provenance` (Minimal/Standard), `Validation.Statistics`,
+  `Validation.Errors` (definition/invocation domains with stable dotted keys),
+  `Validation.Issues` (immutable issue, engine-controlled builder, deterministic
+  Issue_Identity, duplicate-controlled related paths, standard categories,
+  bounded collection), `Validation.Results` (Execution_Status ×
+  Semantic_Validity with validity DERIVED from status+issues, coverage, stop/
+  incompleteness descriptors, the §57 query surface, semantic fingerprint), and
+  `Validation.Projections` (compact issue + result summary v1). Suite green
+  19/19.
 - **Phase 1 — foundational value layer.** `Validation.Identifiers` (distinct
   strong id types via a generic bounded-identifier kind + shared ASCII syntax),
   `Validation.Versions` (semantic + independent schema-version streams),

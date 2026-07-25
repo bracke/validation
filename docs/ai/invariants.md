@@ -14,10 +14,10 @@ owning package exists) covered by tests. Status legend:
 | VAL-INV-001 | Finalized validators are immutable | Validation.Validators | planned |
 | VAL-INV-002 | Finalized contexts are immutable | Validation.Contexts | prototyped |
 | VAL-INV-003 | Finalized profiles are immutable | Validation.Profiles | planned |
-| VAL-INV-004 | Issues and results are immutable | Validation.Issues/Results | planned |
-| VAL-INV-005 | Ordinary validation failure never uses exceptions | Validation.Results | planned |
-| VAL-INV-006 | Every issue has exactly one valid primary path | Validation.Issues | planned |
-| VAL-INV-007 | Every issue identifies its originating validator and rule | Validation.Issues | planned |
+| VAL-INV-004 | Issues and results are immutable | Validation.Issues/Results | proven |
+| VAL-INV-005 | Ordinary validation failure never uses exceptions | Validation.Results | proven |
+| VAL-INV-006 | Every issue has exactly one valid primary path | Validation.Issues | proven |
+| VAL-INV-007 | Every issue identifies its originating validator and rule | Validation.Issues | proven |
 | VAL-INV-008 | Execution order is deterministic for identical inputs | Validation.Internal.* | planned |
 | VAL-INV-009 | Issue order is deterministic for identical inputs | Validation.Internal.Issue_Accumulation | planned |
 | VAL-INV-010 | Profiles suppress/configure but never reorder surviving rules | Validation.Profiles | planned |
@@ -26,7 +26,7 @@ owning package exists) covered by tests. Status legend:
 | VAL-INV-013 | Validation never mutates the subject | Validation.Validators | planned |
 | VAL-INV-014 | Validation never silently normalizes/repairs/trims/canonicalizes/defaults | Validation.Standard | planned |
 | VAL-INV-015 | No externally observable identity from an access value or memory address | Validation.Paths/Contexts | prototyped |
-| VAL-INV-016 | Limit exhaustion is explicit controlled incompleteness | Validation.Results | planned |
+| VAL-INV-016 | Limit exhaustion is explicit controlled incompleteness | Validation.Results | prototyped |
 | VAL-INV-017 | Missing required context capabilities are invocation errors, not issues | Validation.Contexts | planned |
 | VAL-INV-018 | Infrastructure failure is not ordinary invalidity unless a rule policy maps it | Validation.Deferred | planned |
 | VAL-INV-019 | No HTTP/DB/file/network/scheduler/queue/UI operations | (whole core) | proven* |
@@ -35,7 +35,7 @@ owning package exists) covered by tests. Status legend:
 | VAL-INV-022 | Time-sensitive rules never read the system clock implicitly | Validation.Standard.Temporal | planned |
 | VAL-INV-023 | Localized text is never produced by the core | Validation.Messages | planned |
 | VAL-INV-024 | Message ids + typed arguments preserved until an external renderer resolves them | Validation.Messages | planned |
-| VAL-INV-025 | Definition / invocation / incompleteness / stop / pending / ordinary-issue stay distinct | Validation.Results/Errors | planned |
+| VAL-INV-025 | Definition / invocation / incompleteness / stop / pending / ordinary-issue stay distinct | Validation.Results/Errors | proven |
 | VAL-INV-026 | Rule outcomes derived by the engine from controlled output + state | Validation.Rules | prototyped |
 | VAL-INV-027 | A rule callback cannot spoof another rule's validator/rule identity or provenance | Validation.Internal.Rule_Dispatch | planned |
 | VAL-INV-028 | Finalized validators do not retain builder-local temporaries | Validation.Validators | prototyped |

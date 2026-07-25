@@ -20,16 +20,18 @@ any ecosystem project. Status: `built` / `planned`.
 | `Validation.Messages` | Stable message ids + ordered typed arguments | built |
 | `Validation.Metadata` | Bounded metadata key/value | built |
 | `Validation.Source_References` | Neutral source-reference model | built |
-| `Validation.Errors` | Definition/invocation error records | planned (Phase 2) |
-| `Validation.Provenance` | Minimal/Standard provenance | planned (Phase 2) |
+| `Validation.Errors` | Definition/invocation error records | built |
+| `Validation.Provenance` | Minimal/Standard provenance | built |
+| `Validation.Phases` | Canonical execution phases (shared) | built |
+| `Validation.Statistics` | Semantic execution counters | built |
 
 ## Issues & results (Phase 2)
 
 | Package | Responsibility | Status |
 |---------|----------------|--------|
-| `Validation.Issues` | Immutable issue + engine-controlled builder | planned |
-| `Validation.Results` | Execution_Status × Semantic_Validity, scope/coverage, queries, semantic fingerprints | planned |
-| `Validation.Projections` (`.By_Path`/`.By_Object_Key`/`.By_Source`) | Versioned neutral projections | planned |
+| `Validation.Issues` | Immutable issue + engine-controlled builder + collection | built |
+| `Validation.Results` | Execution_Status × Semantic_Validity, coverage, queries, semantic fingerprints | built |
+| `Validation.Projections` | Compact issue + result summary (v1) built; `.By_Path`/`.By_Object_Key`/`.By_Source` + standard/diagnostic projections planned (Phase 10) | partial |
 
 ## Contexts & profiles (Phase 3)
 
