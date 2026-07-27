@@ -30,7 +30,7 @@ and deterministic against adversarial input:
 Bounded execution; strict continuation compatibility; no pointer-derived
 identity; no hidden external I/O; no global mutable registries; disclosure-aware
 paths/arguments/metadata; controlled issue construction; no silent acceptance of
-malformed results. The dependency-boundary audit (`tools/check_dependencies.sh`)
+malformed results. The dependency-boundary audit (`tools/check_validation`)
 enforces the headless boundary.
 
 ## Non-objectives

@@ -6,8 +6,9 @@
 alr build                                   # build the library
 cd tests && alr build && ./bin/tests        # AUnit suite (must stay green)
 cd examples && alr build && ./bin/quickstart
-./tools/check_dependencies.sh               # headless dependency-boundary audit
-./tools/prove.sh                            # GNATprove on the SPARK_Mode units
+cd tools/check_validation && alr build      # the Ada release/check tool
+./bin/check_validation                      # headless dependency-boundary audit
+./bin/check_validation --prove              # GNATprove on the SPARK_Mode units
 ```
 
 ## Coding standard
@@ -21,7 +22,7 @@ needs an explicit `overriding` marker.
 ## Design rules (non-negotiable)
 
 - The core is **headless**: no I/O, clock, randomness, sockets, or ecosystem
-  dependencies (`tools/check_dependencies.sh` enforces this). See
+  dependencies (`tools/check_validation` enforces this). See
   [`docs/ai/prohibited_patterns.md`](docs/ai/prohibited_patterns.md).
 - Ordinary failure is a structured issue, never an exception.
 - No global mutable state; no address-derived identity; every attacker-facing

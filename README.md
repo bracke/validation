@@ -74,8 +74,9 @@ surface are all built and tested. The one open release-integration task is the
 alr build                                    # build the library
 cd tests && alr build && ./bin/tests         # AUnit suite (65 tests)
 cd examples && alr build && ./bin/quickstart # runnable example
-./tools/check_dependencies.sh                # headless dependency-boundary audit
-./tools/prove.sh                             # GNATprove on the SPARK_Mode units
+cd tools/check_validation && alr build       # the Ada release/check tool
+./bin/check_validation                       # headless dependency-boundary audit
+./bin/check_validation --prove               # + GNATprove on the SPARK_Mode units
 ```
 
 ## Layout

@@ -22,14 +22,14 @@ cd check_validation && alr build
 `check_validation` verifies, via `project_tools`:
 
 - **Required surface** — README, LICENSE, CHANGELOG, SECURITY, CONTRIBUTING, the
-  `docs/` guides and `docs/ai/*` set, the ADR index, the `tools/` scripts, and
-  the example source; plus key text (the `gnat_native` pin, `VAL-INV-040`).
-- **Dependency boundary** — runs `tools/check_dependencies.sh` (headless audit).
+  `docs/` guides and `docs/ai/*` set, the ADR index, the `tools/check_validation`
+  tool, and the example source; plus key text (the `gnat_native` pin, `VAL-INV-040`).
+- **Dependency boundary** — runs `tools/check_validation` (headless audit).
 - **Build/test/example** (`--release`) — builds the library, builds and runs the
   AUnit suite (65/65), and builds and runs the example.
 - **Clean worktrees** (`--release-strict`) — validation and project_tools.
 
-Additionally, run `./tools/prove.sh` for the GNATprove check on the SPARK_Mode
+Additionally, run `./bin/check_validation --prove` for the GNATprove check on the SPARK_Mode
 units, and confirm determinism (semantic snapshots reproducible; hashed
 insertion and deferred arrival order independent; no random ids/timestamps/
 addresses in semantic output) and artifact hygiene (versions consistent, no

@@ -5,6 +5,15 @@ Added, Changed, Deprecated, Removed, Fixed, Security, Compatibility.
 
 ## [Unreleased]
 
+### Changed
+
+- **Ada-only repository tooling.** Replaced the shell scripts
+  `tools/check_dependencies.sh` and `tools/prove.sh` with an Ada tool,
+  `tools/check_validation` (built on `project_tools`), so validation's tooling
+  matches the rest of the stack (Ada, no shell/Make logic). It runs the
+  dependency-boundary audit (VAL-INV-019/020) by default, `--release` for
+  build + test, and `--prove` for GNATprove on the SPARK_Mode unit.
+
 ### Added
 
 - **Phase 12 — documentation and release.** A runnable `examples/` subcrate
