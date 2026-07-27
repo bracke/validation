@@ -15,10 +15,10 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Alire
-        uses: alire-project/setup-alire@v4
+        uses: alire-project/setup-alire@v6
 
       - name: Dependency-boundary audit
         run: ./tools/check_dependencies.sh
