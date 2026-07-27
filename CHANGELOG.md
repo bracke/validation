@@ -5,15 +5,6 @@ Added, Changed, Deprecated, Removed, Fixed, Security, Compatibility.
 
 ## [Unreleased]
 
-### Changed
-
-- **Ada-only repository tooling.** Replaced the shell scripts
-  `tools/check_dependencies.sh` and `tools/prove.sh` with an Ada tool,
-  `tools/check_validation` (built on `project_tools`), so validation's tooling
-  matches the rest of the stack (Ada, no shell/Make logic). It runs the
-  dependency-boundary audit (VAL-INV-019/020) by default, `--release` for
-  build + test, and `--prove` for GNATprove on the SPARK_Mode unit.
-
 ### Added
 
 - **Phase 12 — documentation and release.** A runnable `examples/` subcrate
@@ -30,10 +21,10 @@ Added, Changed, Deprecated, Removed, Fixed, Security, Compatibility.
   fingerprint over repeated runs), path-algebra and result property tests,
   deterministic-LCG fuzz targets for identifier construction and UTF-8
   validation (never raise), condition-fault injection, and ownership. Tooling:
-  `tools/check_dependencies.sh` (core dependency-boundary audit) and
-  `tools/prove.sh` (GNATprove on the SPARK_Mode `Identifier_Syntax`, proved free
-  of run-time errors — which caught and fixed a latent `Text'First + 1`
-  overflow). Suite green 65/65.
+  `tools/check_validation` runs the core dependency-boundary audit and, with
+  `--prove`, GNATprove on the SPARK_Mode `Identifier_Syntax` (proved free of
+  run-time errors — which caught and fixed a latent `Text'First + 1` overflow).
+  Suite green 65/65.
 
 ### Fixed
 
