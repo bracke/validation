@@ -28,7 +28,7 @@ Added, Changed, Deprecated, Removed, Fixed, Security, Compatibility.
 
 ### Fixed
 
-- `Identifier_Syntax.Is_Valid` no longer computes `Text'First + 1` (a latent
+- `Identifier_Syntax.Is_Valid` avoids a `Text'First + 1` computation (a latent
   overflow for a pathological lower bound), found by GNATprove.
 
 - **Phase 10 — complete diagnostics.** `Projections.Standard` (standard issue

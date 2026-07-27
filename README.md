@@ -50,8 +50,7 @@ Full runnable version: [`examples/src/quickstart.adb`](examples/src/quickstart.a
 
 ## Status
 
-Feature-complete V1, built in vertical slices (phases 0–12, see
-[`docs/PHASE_STATUS.md`](docs/PHASE_STATUS.md)); **65 tests green**. Scalars,
+Feature-complete V1; **65 tests green**. Scalars,
 records, nested and recursive objects, collections, profiles/conditions/
 prerequisites, deferred validation with replay, and the diagnostics/projection
 surface are all built and tested. The one open release-integration task is the
