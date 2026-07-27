@@ -53,7 +53,7 @@ owning package exists) covered by tests. Status legend:
 | VAL-INV-040 | Deferred Validation is never a substitute for Authorization/scope/obligation evaluation | Validation.Deferred | planned |
 
 Structural invariants (no I/O, no registries, no auth) are guaranteed by the
-dependency graph and enforced by `tools/check_dependencies.sh`, which audits the
+dependency graph and enforced by `tools/check_validation`, which audits the
 core against forbidden I/O / clock / random / socket / ecosystem `with`s.
 
 ## Phase 0 evidence

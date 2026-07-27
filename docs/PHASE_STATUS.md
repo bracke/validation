@@ -330,9 +330,9 @@ Builds clean; suite green (65/65). A `hardening_tests` suite adds:
 - **Ownership** — a validator built inside a function (its builder long gone)
   validates correctly (VAL-INV-028).
 
-Tooling: `tools/check_dependencies.sh` audits the core against forbidden I/O /
-clock / random / socket / ecosystem `with`s (clean, 55 units). `tools/prove.sh`
-runs GNATprove on the SPARK_Mode foundational unit `Validation.Identifier_Syntax`
+Tooling: `tools/check_validation` audits the core against forbidden I/O /
+clock / random / socket / ecosystem `with`s (clean, 55 units). `check_validation
+--prove` runs GNATprove on the SPARK_Mode foundational unit `Validation.Identifier_Syntax`
 — proved free of run-time errors (§74). GNATprove caught a real latent overflow
 (`Text'First + 1`), now fixed. Callback-heavy polymorphic execution is out of
 proof scope by design.
