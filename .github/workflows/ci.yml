@@ -59,7 +59,12 @@ jobs:
 
       - name: Release guard (project_tools)
         working-directory: validation
+        # tools/check_validation is the current Ada release/check tool (README,
+        # CONTRIBUTING, docs/RELEASE.md, CHANGELOG). The root check_validation/ is
+        # the pre-migration crate: commit 5df43ee replaced the shell scripts with
+        # tools/check_validation but left the root tool still requiring and
+        # shelling out to the deleted tools/check_dependencies.sh / prove.sh.
         run: |
-          cd check_validation
+          cd tools/check_validation
           alr --non-interactive build
           ./bin/check_validation
