@@ -15,7 +15,18 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - name: Check out validation
+        uses: actions/checkout@v7
+        with:
+          path: validation
+
+      - name: Check out sibling crates (transitive pin closure)
+        # check_validation pins project_tools (../../project_tools); the shared
+        # action clones the transitive pin closure next to the validation
+        # checkout so the release guard can build.
+        uses: bracke/project_tools/.github/actions/checkout-ada-siblings@main
+        with:
+          root: validation
 
       - name: Set up Alire
         uses: alire-project/setup-alire@v6
@@ -29,21 +40,25 @@ jobs:
         run: alr settings --global --set solver.timeout 600
 
       - name: Build library
+        working-directory: validation
         run: alr --non-interactive build
 
       - name: Build and run tests
+        working-directory: validation
         run: |
           cd tests
           alr --non-interactive build
           ./bin/tests
 
       - name: Build and run the example
+        working-directory: validation
         run: |
           cd examples
           alr --non-interactive build
           ./bin/quickstart
 
       - name: Release guard (project_tools)
+        working-directory: validation
         run: |
           cd check_validation
           alr --non-interactive build
