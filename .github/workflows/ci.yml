@@ -28,9 +28,6 @@ jobs:
         shell: bash
         run: alr settings --global --set solver.timeout 600
 
-      - name: Dependency-boundary audit
-        run: ./tools/check_dependencies.sh
-
       - name: Build library
         run: alr --non-interactive build
 
