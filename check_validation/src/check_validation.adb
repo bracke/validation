@@ -116,8 +116,10 @@ procedure Check_Validation is
       Need_File ("tests/alire.toml");
       Need_File ("examples/alire.toml");
       Need_File ("examples/src/quickstart.adb");
-      Need_File ("tools/check_dependencies.sh");
-      Need_File ("tools/prove.sh");
+      --  The dependency-boundary audit and the gnatprove wrapper are the Ada
+      --  tools/check_validation crate now (it replaced the former
+      --  tools/check_dependencies.sh and tools/prove.sh shell scripts).
+      Need_File ("tools/check_validation/check_validation.gpr");
 
       Need_File ("docs/QUICKSTART.md");
       Need_File ("docs/ARCHITECTURE.md");
@@ -140,11 +142,18 @@ procedure Check_Validation is
    ---------------------------------------------------------------------------
 
    procedure Check_Dependency_Boundary is
-      Shell : constant String := Proc.Locate_Command ("sh");
+      Alr  : constant String := Proc.Locate_Command ("alr");
+      Tool : constant String := The_Root & "/tools/check_validation";
    begin
-      Ignored :=
-        Run ("dependency audit", The_Root, Shell,
-             [1 => new String'("tools/check_dependencies.sh")]);
+      --  The boundary audit is the tools/check_validation Ada crate (it replaced
+      --  tools/check_dependencies.sh). Build it, then run its headless audit.
+      if Run ("dependency audit build", Tool, Alr,
+              [new String'("--non-interactive"), new String'("build")])
+      then
+         Ignored :=
+           Run ("dependency audit", Tool,
+                Tool & "/bin/check_validation", No_Args);
+      end if;
    end Check_Dependency_Boundary;
 
    ---------------------------------------------------------------------------
