@@ -7,6 +7,7 @@ maintainers = ["Bent Bracke <bent@bracke.dk>"]
 maintainers-logins = ["bracke"]
 licenses = "MIT OR Apache-2.0 WITH LLVM-exception"
 website = "https://github.com/bracke/validation"
+long-description = "validation is a headless, deterministic, strongly typed validation engine for Ada 2022, answering one question about a subject: is it valid, and if not, why. It validates scalars, records, nested and recursive objects and optional values, and does exactly one job -- it performs no HTTP, database, file, network, scheduler or UI work, does not authenticate or authorize, does not render localized text but returns stable message ids with typed arguments, and never mutates, trims, normalizes or repairs the subject it was given."
 
 tags = ["validation", "headless", "data-quality"]
 
