@@ -6,6 +6,7 @@ with GNAT.OS_Lib;
 
 with Project_Tools.Files;
 with Project_Tools.Processes;
+with Project_Tools.Release_Checks;
 
 --  Ada replacement for the former shell tools/check_dependencies.sh and
 --  tools/prove.sh, so validation's repository tooling is Ada-only like the rest
@@ -126,6 +127,16 @@ procedure Check_Validation is
 
 begin
    Check_Boundary;
+
+   declare
+      Stale_Docs : constant String :=
+        Project_Tools.Release_Checks.Stale_Doc_Scaffolding (The_Root);
+   begin
+      if Stale_Docs /= "" then
+         Fail ("docs carry stale scaffolding -- describe current state, not a "
+               & "future phase:" & ASCII.LF & Stale_Docs);
+      end if;
+   end;
 
    if Proc.Has_Argument ("--release") then
       Ignored := Run ("test", The_Root, Proc.Locate_Command ("alr"),
